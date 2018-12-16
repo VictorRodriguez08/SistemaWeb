@@ -17,6 +17,9 @@ Route::get('/', function () {
 
 Route::resource('administracion/rol','RolController');
 Route::resource('administracion/usuario','UsuarioController');
+Route::get('administracion/usuario/buscar/{criterio?}', 'UsuarioController@buscar')->name('usuario.buscar');
+Route::resource('estados','EstadosController');
+Route::resource('tesis','TesisController');
 Route::auth();
 
 

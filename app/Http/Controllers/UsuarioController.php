@@ -34,9 +34,10 @@ class UsuarioController extends Controller
     {
         $usuarios=User::find($id);
         return view('administracion.usuario.show',["usuarios"=>$usuarios]);
+    }
 
-
-
+    public function buscar($criterio=""){
+        return User::buscar($criterio);
     }
 
     public function create()

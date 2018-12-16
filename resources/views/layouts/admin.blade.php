@@ -18,6 +18,8 @@
     <link rel="icono-congreso" href="{{asset('img/icono-congreso.png')}}">
     <link rel="shortcut icon" href="{{asset('img/favicon.ico')}}">
 
+    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
   </head>
   <body class="hold-transition skin-green sidebar-mini">
     <div class="wrapper">
@@ -205,6 +207,21 @@
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('js/app.min.js')}}"></script>
+    <script src="{{asset('js/tesis.js')}}"></script>
+ <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+ <script src="https://unpkg.com/gijgo@1.9.11/js/messages/messages.es-es.js" type="text/javascript"></script>
     
+    <script>
+      $(document).ready(function(){
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        var config = {
+          locale: "es-es",
+            uiLibrary: 'bootstrap',
+            minDate: today,
+            format: 'dd/mm/yyyy'     }
+        $('#fecha_ini').datepicker(config);
+        $('#fecha_fin').datepicker(config);
+      });
+    </script>  
   </body>
 </html>
