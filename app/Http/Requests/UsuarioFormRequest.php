@@ -23,10 +23,18 @@ class UsuarioFormRequest extends Request
      */
     public function rules()
     {
+        if ($this->method()=='PATCH')
+        {
+            $email_r='required|string|email|max:255|unique:users,id'.$this->get('id');
+        }
+        else
+        {
+            $email_r='required|string|email|max:255|unique:users,email';
+        }
         return [
             'name'=>'required|max:100',
             'apellidos'=>'required|max:100',
-            'email'=>'required|string|email|max:255|unique:users,email'.$this->id,
+            //'email'=>'required|string|email|max:255|unique:users,email'.$this->id,
             'password'=>'required|min:6|confirmed',
             'direccion'=>'required|max:200',
             'titulo'=>'required|max:100',

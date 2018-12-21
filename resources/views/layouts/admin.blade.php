@@ -116,8 +116,8 @@
                  <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href=""><i class="fa fa-circle-o"></i> Registrar</a></li>
-                <li><a href="ventas/cliente"><i class="fa fa-circle-o"></i> Ver Revisiones</a></li>
+                <li><a href="{{url('tesis')}}"><i class="fa fa-circle-o"></i> Registrar</a></li>
+                <li><a href=""><i class="fa fa-circle-o"></i> Ver Revisiones</a></li>
               </ul>
             </li>
                        
