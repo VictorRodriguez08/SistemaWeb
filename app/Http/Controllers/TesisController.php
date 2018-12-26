@@ -149,4 +149,15 @@ class TesisController extends Controller
         }
         return Redirect::to('tesis');
     }
+
+    public function GetUsuariosTesis($id){
+        $tesis = Tesis::find($id);
+        $nombre_usuarios = [];
+        foreach ($tesis->usuario_tesis as $usuario){
+            $nombre_usuarios[] = array(
+                'nombre'=>$usuario->user->name . " " . $usuario->user->apellidos
+            );
+        }
+        return $nombre_usuarios;
+    }
 }
