@@ -21,8 +21,8 @@
 						<tr>
 							<td>{{ $t->titulo}}</td>
 							<td>{{ $t->estado->estado}}</td>
-							<td>{{ $t->fecha_ini}}</td>
-							<td>{{ $t->fecha_fin}}</td>
+							<td>{{ date('d-m-Y',strtotime($t->fecha_ini))}}</td>
+							<td>{{ date('d-m-Y',strtotime($t->fecha_fin))}}</td>
 							<td>
 								<a href="{{URL::action('TesisController@show', $t->id)}}"><button class="btn btn-info">Ver</button></a>
 							</td>
@@ -35,4 +35,18 @@
 			</table>
 		</div>
 	</div>
+@endsection
+
+@section ('scripts')
+	@if (Session::has('message'))
+		<script>
+			$(document).ready(function(){
+				Swal({
+					title: 'Tesis',
+					text: "{{ Session::get('message') }}",
+					timer:5000
+				});
+			})
+		</script>
+	@endif
 @endsection
