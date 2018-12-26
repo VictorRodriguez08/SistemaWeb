@@ -5,6 +5,7 @@ namespace sistemaWeb\Http\Controllers;
 use sistemaWeb\Http\Requests;
 use Illuminate\Http\Request;
 
+
 class HomeController extends Controller
 {
     /**

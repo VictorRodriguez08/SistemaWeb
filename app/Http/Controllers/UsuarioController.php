@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use sistemaWeb\Http\Requests;
 use sistemaWeb\User;
+use sistemaWeb\Log;
 use Illuminate\Support\Facades\Redirect;
 use sistemaWeb\Http\Requests\UsuarioFormRequest;
 use DB;
@@ -61,6 +62,13 @@ class UsuarioController extends Controller
     	$usuario->otros_email=$request->get('otros_email');
     	$usuario->save();
 
+        Log::create([
+            'nombre_tabla'=>'tabla Usuario',
+            'id_user'=>Auth()->user()->id,
+            'accion_realizada'=>'Usuario creado con id'.$usuario->id
+
+        ]);
+
     	return Redirect::to('administracion/usuario');
     }
 
@@ -84,6 +92,14 @@ class UsuarioController extends Controller
     	$usuario->telefonos=$request->get('telefonos');
     	$usuario->otros_email=$request->get('otros_email');
     	$usuario->update();
+
+        Log::create([
+            'nombre_tabla'=>'tabla Usuario',
+            'id_user'=>Auth()->user()->id,
+            'accion_realizada'=>'Usuario modificado con id: '.$usuario->id
+            
+        ]);
+
     	return Redirect::to('administracion/usuario');
 
     }
@@ -91,6 +107,13 @@ class UsuarioController extends Controller
     public function destroy($id)
     {
     	$usuario =DB::table('users')->where('id', '=' , $id)->delete();
+
+            Log::create([
+            'nombre_tabla'=>'tabla Usuario',
+            'id_user'=>Auth()->user()->id,
+            'accion_realizada'=>'Usuario eliminado con id: '.$usuario->id
+            
+        ]);
     	return Redirect::to('administracion/usuario');
 
     }

@@ -35,7 +35,7 @@ class UsuarioFormRequest extends Request
             'name'=>'required|max:100',
             'apellidos'=>'required|max:100',
             //'email'=>'required|string|email|max:255|unique:users,email'.$this->id,
-            'email'=>email_r,
+            'email'=>$email_r,
             'password'=>'required|min:6|confirmed',
             'direccion'=>'required|max:200',
             'titulo'=>'required|max:100',
