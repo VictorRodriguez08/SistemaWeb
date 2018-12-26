@@ -11,4 +11,8 @@ class Tesis extends Model
     public function estado(){
     	return $this->belongsTo('sistemaWeb\Estado');
     }
+
+    public function usuario_tesis(){
+        return $this->hasMany('sistemaWeb\Usuario_tesis');
+    }
 }

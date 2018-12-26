@@ -15,6 +15,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{asset('css/_all-skins.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/sweetalert2.css')}}">
     <link rel="icono-congreso" href="{{asset('img/icono-congreso.png')}}">
     <link rel="shortcut icon" href="{{asset('img/favicon.ico')}}">
 
@@ -210,9 +211,10 @@
     <!-- AdminLTE App -->
     <script src="{{asset('js/app.min.js')}}"></script>
     <script src="{{asset('js/tesis.js')}}"></script>
+    <script src="{{asset('js/sweetalert2.js')}}"></script>
  <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
  <script src="https://unpkg.com/gijgo@1.9.11/js/messages/messages.es-es.js" type="text/javascript"></script>
-    
+    @yield('scripts')
     <script>
       $(document).ready(function(){
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -220,7 +222,7 @@
           locale: "es-es",
             uiLibrary: 'bootstrap',
             minDate: today,
-            format: 'dd/mm/yyyy'     }
+            format: 'dd-mm-yyyy'     }
         $('#fecha_ini').datepicker(config);
         $('#fecha_fin').datepicker(config);
       });

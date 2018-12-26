@@ -8,6 +8,8 @@ use sistemaWeb\Http\Requests;
 use sistemaWeb\Tesis;
 use sistemaWeb\Estado;
 use sistemaWeb\Http\Requests\TesisRequest;
+use sistemaWeb\Usuario_tesis;
+
 class TesisController extends Controller
 {
     /**
@@ -40,14 +42,30 @@ class TesisController extends Controller
      */
     public function store(TesisRequest $request)
     {
-        $tesis = new Tesis();
-        $tesis->titulo = $request->input('titulo');
-        $tesis->estado_id = $request->input('estado_id');
-        $tesis->fecha_ini = $request->input('fecha_ini');
-        $tesis->fecha_fin = $request->input('fecha_fin');
+        $error = "";
+        try{
+            \DB::beginTransaction();
 
-        return $request->input('usuario_id');
-        
+            $tesis = new Tesis();
+                $tesis->titulo = $request->input('titulo');
+                $tesis->estado_id = $request->input('estado_id');
+                $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
+                $tesis->fecha_fin =  date('Y-m-d', strtotime($request->input('fecha_fin')));
+                $tesis->save();
+
+                foreach ($request->input('usuario_id') as $usuario_id) {
+                     $usuario = new Usuario_tesis();
+                     $usuario->user_id = $usuario_id;
+                     $usuario->tesis_id = $tesis->id;
+                     $usuario->save();
+                 }
+            \DB::commit();
+            return redirect('tesis/')->with('message', 'Tesis creada correctamente');
+        }catch(\Exception $e){
+            \DB::rollback();
+        }
+
+        return redirect('tesis/create');
     }
 
     /**
@@ -69,7 +87,9 @@ class TesisController extends Controller
      */
     public function edit($id)
     {
-        //
+        $estados = Estado::all();
+        $tesis = Tesis::find($id);
+        return view('principal.tesis.editar',['estados'=>$estados, 'tesis'=>$tesis]);
     }
 
     /**
@@ -79,9 +99,35 @@ class TesisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TesisRequest $request, $id)
     {
-        //
+        $tesis = Tesis::find($id);
+        $tesis->titulo = $request->input('titulo');
+        $tesis->estado_id = $request->input('estado_id');
+        $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
+        $tesis->fecha_fin =  date('Y-m-d', strtotime($request->input('fecha_fin')));
+
+        try{
+            \DB::beginTransaction();
+
+            $tesis->save();
+
+            Usuario_tesis::eliminar_por_tesis($id);
+
+            foreach ($request->input('usuario_id') as $usuario_id) {
+                $usuario = new Usuario_tesis();
+                $usuario->user_id = $usuario_id;
+                $usuario->tesis_id = $tesis->id;
+                $usuario->save();
+            }
+
+            \DB::commit();
+            return redirect('tesis/')->with('message', 'Tesis actualizada correctamente');
+        }catch(\Exception $e){
+            \DB::rollback();
+        }
+        $estados = Estado::all();
+        return view('principal.tesis.editar',['estados'=>$estados, 'tesis'=>$tesis]);
     }
 
     /**
@@ -92,6 +138,26 @@ class TesisController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            \DB::beginTransaction();
+                Usuario_tesis::eliminar_por_tesis($id);
+                \DB::table('tesis')->where('id', '=' , $id)->delete();
+            \DB::commit();
+            return redirect('tesis/')->with('message', 'Tesis eliminada correctamente');
+        }catch(\Exception $e){
+            \DB::rollback();
+        }
+        return Redirect::to('tesis');
+    }
+
+    public function GetUsuariosTesis($id){
+        $tesis = Tesis::find($id);
+        $nombre_usuarios = [];
+        foreach ($tesis->usuario_tesis as $usuario){
+            $nombre_usuarios[] = array(
+                'nombre'=>$usuario->user->name . " " . $usuario->user->apellidos
+            );
+        }
+        return $nombre_usuarios;
     }
 }

@@ -17,6 +17,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function usuario_tesis(){
+        return $this->hasMany('sistemaWeb\Usuario_tesis');
+    }
+
     public static function buscar($criterio=""){
     	if($criterio!='all'){
 	    	return User::whereRaw(DB::raw("concat(name, ' ', apellidos) like '%" . $criterio . "%'"))->get();
