@@ -138,6 +138,15 @@ class TesisController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            \DB::beginTransaction();
+                Usuario_tesis::eliminar_por_tesis($id);
+                \DB::table('tesis')->where('id', '=' , $id)->delete();
+            \DB::commit();
+            return redirect('tesis/')->with('message', 'Tesis eliminada correctamente');
+        }catch(\Exception $e){
+            \DB::rollback();
+        }
+        return Redirect::to('tesis');
     }
 }

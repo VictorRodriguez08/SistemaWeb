@@ -24,17 +24,19 @@
 							<td>{{ date('d-m-Y',strtotime($t->fecha_ini))}}</td>
 							<td>{{ date('d-m-Y',strtotime($t->fecha_fin))}}</td>
 							<td>
-								<a href="{{URL::action('TesisController@show', $t->id)}}"><button class="btn btn-info">Ver</button></a>
+								<a href="" data-target="#modal-delete-{{$t->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>
 							</td>
 							<td>
 								<a href="{{URL::action('TesisController@edit',$t->id)}}"><button class="btn btn-info">Editar</button></a>
 							</td>
 						</tr>
+						@include('principal.tesis.modal_eliminar')
 					@endforeach
 				</tbody>
 			</table>
 		</div>
 	</div>
+
 @endsection
 
 @section ('scripts')
