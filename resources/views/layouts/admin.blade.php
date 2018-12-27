@@ -50,7 +50,9 @@
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <small class="bg-red">Linea</small>
-                  <span class="hidden-xs">Usuario</span>
+                  <!--<span class="hidden-xs">Usuario</span>-->
+                  <p>{{Auth::user()->name." ".Auth::user()->apellidos}}</p>
+
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
