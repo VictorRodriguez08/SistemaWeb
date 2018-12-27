@@ -62,6 +62,10 @@ class UsuarioController extends Controller
     	$usuario->otros_email=$request->get('otros_email');
     	$usuario->save();
 
+    	//Enviar notificacion al administrador
+        $emailController = new MailController();
+        $emailController->email($usuario->id);
+
         Log::create([
             'nombre_tabla'=>'tabla Usuario',
             'id_user'=>Auth()->user()->id,

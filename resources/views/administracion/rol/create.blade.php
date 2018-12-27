@@ -1,4 +1,4 @@
 @extends ('layouts.admin')
 @section ('contenido')
-		<h3>Create</h3>
+		<h3>{{$usuario->name . " " . $usuario->apellidos}}</h3>
 @stop
