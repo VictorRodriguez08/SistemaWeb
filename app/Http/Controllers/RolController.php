@@ -10,6 +10,7 @@ use sistemaWeb\Rol;
 use Illuminate\Support\Facades\Redirect;
 use sistemaWeb\Http\Request\RolRequest;
 use DB;
+use sistemaWeb\User;
 
 
 class RolController extends Controller
@@ -23,15 +24,16 @@ class RolController extends Controller
     {
     	if ($request) {
     		$query=trim($request->get('searchText'));
-    		$roles=DB::table('roles')->where('rol','LIKE','%'.$query.'%')
+    		$roles=DB::table('roles_1')->where('rol','LIKE','"%'.$query.'%"')
             ->paginate(7);
     		return view('administracion.rol.index',["roles"=>$roles,"searchText"=>$query]);
     	}
     }
 
-    public function create()
+    public function create($id)
     {
-    	return view("administracion.rol.create");
+        $usuario = User::find($id);
+    	return view("administracion.rol.create",['usuario'=>$usuario]);
     }
 
     public function store(RolRequest $request)

@@ -21,6 +21,8 @@ Route::get('administracion/usuario/buscar/{criterio?}', 'UsuarioController@busca
 Route::resource('estados','EstadosController');
 Route::resource('tesis','TesisController');
 Route::get('tesis/GetUsuariosTesis/{id}','TesisController@GetUsuariosTesis');
+Route::get('sendmail/{id}','MailController@email');
+Route::get('administracion/rol/create/{id}','RolController@create');
 Route::auth();
 
 

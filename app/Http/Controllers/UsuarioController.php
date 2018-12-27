@@ -61,6 +61,10 @@ class UsuarioController extends Controller
     	$usuario->otros_email=$request->get('otros_email');
     	$usuario->save();
 
+    	//Enviar notificacion al administrador
+        $emailController = new MailController();
+        $emailController->email($usuario->id);
+
     	return Redirect::to('administracion/usuario');
     }
 
