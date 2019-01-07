@@ -52,7 +52,6 @@
                   <small class="bg-red">Linea</small>
                   <!--<span class="hidden-xs">Usuario</span>-->
                   <p>{{Auth::user()->name." ".Auth::user()->apellidos}}</p>
-
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
@@ -130,7 +129,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="configuracion/usuario"><i class="fa fa-circle-o"></i> Ver Registros</a></li>
+                <li><a href="{{url('registro/log')}}"><i class="fa fa-circle-o"></i> Ver Registros</a></li>
                 
               </ul>
             </li>
