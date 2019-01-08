@@ -129,7 +129,7 @@
             </div>
             <div class="from-group">
                 <button class="btn btn-primary" type="submit">Guardar</button>
-                <button class="btn btn-danger" type="reset">Cancelar</button>
+                <a href="{{URL::action('TesisController@index')}}" class="btn btn-danger" type="reset">Cancelar</a>
 
             </div>
 
