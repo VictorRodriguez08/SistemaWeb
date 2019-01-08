@@ -78,6 +78,7 @@ function eliminar_usuario(id, element, event){
 		if(parseInt($(valor).val()) === parseInt(id)){
 			$(valor).remove();
 			$(fila).remove();
+			maximo_tesis--;
 			return false;
 		}
 	});
