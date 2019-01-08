@@ -2,6 +2,9 @@
 @section ('contenido')
 
 		<div class="row">
+            {!!Form::Open(array('url'=>'tesis', 'method'=>'POST','autocomplete'=>'off'))!!}
+            {!! Form::hidden('urlBuscarUsuario', url('administracion/usuario/buscar'),array('id' => 'urlBuscarUsuario')) !!}
+            {{Form::token()}}
 			<div class="col-lg-6 col-md-6 col-sm6 col-xs-12 ">
 				<h3> Nueva Tesis</h3>
 				@if(count($errors)>0)
@@ -14,9 +17,7 @@
 				</div>
 				@endif
 
-				{!!Form::Open(array('url'=>'tesis', 'method'=>'POST','autocomplete'=>'off'))!!}
-                {!! Form::hidden('urlBuscarUsuario', url('administracion/usuario/buscar'),array('id' => 'urlBuscarUsuario')) !!}
-					{{Form::token()}}
+
                     <div class="row">
                         <div class="form-group{{ $errors->has('titulo') ? ' has-error' : '' }}">
                             <label for="titulo" class="col-md-6 control-label">Título</label>
@@ -96,32 +97,35 @@
                     <div class="col-sm-12 col-md-2">
                         <a href="#" id="btnBuscarUsuario" class="btn btn-primary">Agregar</a>
                     </div>
-                    
-                    
-                    <div class="table-responsibe">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbodyUsuariosTesis">
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                <div id="listaUsuarios"></div>                    
-				<div class="from-group">
-					<button class="btn btn-primary" type="submit">Guardar</button>
-					<a href="{{URL::action('TesisController@index')}}" class="btn btn-danger" type="reset">Cancelar</a>
-					
-				</div>
-
-			{!!Form::close()!!}
 			</div>
-		</div>
+            <div class="col-xs-12">
+                <div class="table-responsibe">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="hidden"></th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Jurado</th>
+                            <th>Asesor</th>
+                            <th>Alumno</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbodyUsuariosTesis">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="listaUsuarios"></div>
+                <div class="from-group">
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <a href="{{URL::action('TesisController@index')}}" class="btn btn-danger" type="reset">Cancelar</a>
+
+                </div>
+            </div>
+            {!!Form::close()!!}
+        </div>
 
         @include('principal.tesis.modal')
 @endsection
