@@ -28,8 +28,7 @@
 						<th width="200px">Email</th>
 						<th colspan="3">&nbsp</th>
 						<th>Opciones</th>
-						<th></th>
-						<th></th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -42,13 +41,25 @@
 						<td>{{ $l->created_at}}</td>
 						<td>{{ $l->email}}</td>
 						<th colspan="3">&nbsp</th>
-						
+						<td>
+							<a href="{{URL::action('LogController@show',$l->id)}}"><button class="btn btn-info">Ver</button></a>
+						</td>
+
+							
+									
+						 
 					</tr>
 					
 				@endforeach
 				</tbody>
 				
 			</table>
+			<td>
+					
+            <a href="{{URL::action('LogController@pdf',$l->id)}}"><button class="btn btn-info">Ver R</button></a>
+							</td>	
+									
+        
 			
 		</div>
 		{{$logs->render()}}
