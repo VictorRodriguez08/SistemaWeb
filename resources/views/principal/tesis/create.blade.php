@@ -5,6 +5,10 @@
             {!!Form::Open(array('url'=>'tesis', 'method'=>'POST','autocomplete'=>'off'))!!}
             {!! Form::hidden('urlBuscarUsuario', url('administracion/usuario/buscar'),array('id' => 'urlBuscarUsuario')) !!}
             {{Form::token()}}
+            <input type="hidden" value="{{$ESTADOS_TESIS->PERFIL}}" id="PERFIL">
+            <input type="hidden" value="{{$ESTADOS_TESIS->ANTEPROYECTO}}" id="ANTEPROYECTO">
+            <input type="hidden" value="{{$ESTADOS_TESIS->TESIS}}" id="TESIS">
+
 			<div class="col-lg-6 col-md-6 col-sm6 col-xs-12 ">
 				<h3> Nueva Tesis</h3>
 				@if(count($errors)>0)

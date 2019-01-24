@@ -4,6 +4,7 @@ namespace sistemaWeb\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use sistemaWeb\EstadosTesis;
 use sistemaWeb\Http\Requests;
 use sistemaWeb\Tesis;
 use sistemaWeb\Estado;
@@ -30,8 +31,10 @@ class TesisController extends Controller
      */
     public function create()
     {
+        $estadostesis = new EstadosTesis();;
+
         $estados = Estado::all();
-        return view('principal.tesis.create',['estados'=>$estados]);
+        return view('principal.tesis.create',['estados'=>$estados, 'ESTADOS_TESIS'=>$estadostesis]);
     }
 
     /**

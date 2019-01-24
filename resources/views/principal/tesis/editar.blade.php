@@ -1,10 +1,12 @@
 @extends ('layouts.admin')
 @section ('contenido')
 
+
     <div class="row">
         {!!Form::model($tesis,['method'=>'PATCH','route'=>['tesis.update',$tesis->id]])!!}
         {!! Form::hidden('urlBuscarUsuario', url('administracion/usuario/buscar'),array('id' => 'urlBuscarUsuario')) !!}
         {{Form::token()}}
+        <input type="hidden" value="{{Config('app.estados_tesis')}}" id="estados_tesis">
         <div class="col-lg-6 col-md-6 col-sm6 col-xs-12 ">
             <h3> Editar Tesis</h3>
             @if(count($errors)>0)

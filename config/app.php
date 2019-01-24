@@ -2,6 +2,7 @@
 
 return [
 
+    'estados_tesis' => array("PERFIL"=>1,"ANTEPROYECTO"=>2, "TESIS"=>3),
     /*
     |--------------------------------------------------------------------------
     | Application Environment

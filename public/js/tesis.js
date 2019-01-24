@@ -7,7 +7,16 @@ var ASESOR = 2;
 var JURADO = 3;
 var correlativo = 0;
 
+var PERFIL;
+var ANTEPROYECTO;
+var TESIS;
+var SelectEstados;
+
 $(document).ready(function(){
+	PERFIL = $('#PERFIL').val();
+	ANTEPROYECTO = $('#ANTEPROYECTO').val();
+	TESIS = $('#TESIS').val();
+	SelectEstados = $('#estado_id');
 	$('form').submit(function(){
 		if(maximo_alumnos < 1){
 			Swal({
@@ -73,52 +82,63 @@ function seleccionar_usuario(element){
 		var check_jurado = false;
 		var tipo_agregado = 0;
 
-		if(verificar_disponibilidad(JURADO)){
-			check_jurado = true;
-			maximo_jurados++;
-			tipo_agregado = 3;
-		}
+        if(SelectEstados.val() === PERFIL && verificar_disponibilidad(ALUMNO)){
+                check_alumno = true;
+                maximo_alumnos++;
+                tipo_agregado = 1;
+                if(verificar_disponibilidad(ASESOR)){
+					$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').removeAttr('disabled');
+					$('#estado_id').find('option[value="' + TESIS + '"]').attr('disabled','disabled');
+				}else{
+					$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
+					$('#estado_id').find('option[value="' + TESIS + '"]').removeAttr('disabled');
+				}
+        }
 
-		if(!check_jurado && verificar_disponibilidad(ASESOR)){
+		if(SelectEstados.val() === ANTEPROYECTO && verificar_disponibilidad(ASESOR)){
 			check_asesor = true;
 			maximo_asesores++;
 			tipo_agregado = 2;
+			$('#estado_id').find('option[value="' + TESIS + '"]').attr('disabled','disabled');
 		}
 
-		if(!check_jurado && !check_asesor && verificar_disponibilidad(ALUMNO)){
-			check_alumno = true;
-			maximo_alumnos++;
-			tipo_agregado = 1;
+		if(SelectEstados.val() === TESIS && verificar_disponibilidad(JURADO)){
+			check_jurado = true;
+			maximo_jurados++;
+			tipo_agregado = 3;
+			$('#estado_id').find('option[value="' + PERFIL + '"]').attr('disabled','disabled');
+			$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
 		}
 
-
-		var datos = "";
-		var name_radio = "optionsRadios" + correlativo++;
-		datos += "<tr>";
+		if(check_alumno || check_asesor || check_jurado){
+			var datos = "";
+			var name_radio = "optionsRadios" + correlativo++;
+			datos += "<tr>";
 			datos += "<td>";
-				datos += "<a href='#' class='btn btn-danger' onclick='eliminar_usuario(" + $(fila.children('td')[0]).text() + "," +tipo_agregado+ ", this, event)'>Eliminar</a>";
+			datos += "<a href='#' class='btn btn-danger' onclick='eliminar_usuario(" + $(fila.children('td')[0]).text() + "," +tipo_agregado+ ", this, event)'>Eliminar</a>";
 			datos += "</td>";
 			datos += "<td class='hidden'>";
-				datos += $(fila.children('td')[0]).text();
+			datos += $(fila.children('td')[0]).text();
 			datos += "</td>";
 			datos += "<td>";
-				datos += $(fila.children('td')[1]).text();
+			datos += $(fila.children('td')[1]).text();
 			datos += "</td>";
 			datos += "<td>";
-				datos += $(fila.children('td')[2]).text();
+			datos += $(fila.children('td')[2]).text();
 			datos += "</td>";
-		datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='1' " + (check_jurado ? "checked" : "" ) + " disabled></label></div></td>";
-		datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='2' " + (check_asesor ? "checked" : "" ) +" disabled></label></div></td>";
-		datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='3' " + (check_alumno ? "checked" : "" ) + " disabled></label></div></td>";
-		datos += "</tr>";
-		$('#tbodyUsuariosTesis').append(datos);
-		$('#modalBusqueda').modal('hide');
+			datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='1' " + (check_jurado ? "checked" : "" ) + " disabled></label></div></td>";
+			datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='2' " + (check_asesor ? "checked" : "" ) +" disabled></label></div></td>";
+			datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='3' " + (check_alumno ? "checked" : "" ) + " disabled></label></div></td>";
+			datos += "</tr>";
+			$('#tbodyUsuariosTesis').append(datos);
 
-		var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + '">';
-		$('#listaUsuarios').append(usuario);
-		maximo_tesis++;
+			var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + '">';
+			$('#listaUsuarios').append(usuario);
+			maximo_tesis++;
+		}
+		$('#modalBusqueda').modal('hide');
 	}else{
-		if(maximo_tesis<3){
+		if(maximo_tesis<7){
 			Swal({
 				type: 'error',
 				title: 'Agregar Usuario',
