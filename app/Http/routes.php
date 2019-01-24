@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('auth/login');
+	return view('auth/login');
 });
 
 Route::resource('administracion/rol','RolController');
@@ -23,6 +23,12 @@ Route::resource('tesis','TesisController');
 Route::get('tesis/GetUsuariosTesis/{id}','TesisController@GetUsuariosTesis');
 Route::get('sendmail/{id}','MailController@email');
 Route::get('administracion/rol/create/{id}','RolController@create');
+
+Route::resource('registro/log','LogController');
+Route::get('/','LogController@index')->name('logs');
+Route::get('descargar','LogController@pdf')->name('log.pdf');
+
+
 Route::auth();
 
 

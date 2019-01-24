@@ -69,7 +69,7 @@ class UsuarioController extends Controller
         Log::create([
             'nombre_tabla'=>'tabla Usuario',
             'id_user'=>Auth()->user()->id,
-            'accion_realizada'=>'Usuario creado con id'.$usuario->id
+            'accion_realizada'=>'Usuario creado con id: '.$usuario->id
 
         ]);
 

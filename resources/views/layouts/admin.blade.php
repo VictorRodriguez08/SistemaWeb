@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistema Web de Gestión y Publicacion de Investigaciones</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -18,6 +20,8 @@
     <link rel="stylesheet" href="{{asset('css/sweetalert2.css')}}">
     <link rel="icono-congreso" href="{{asset('img/icono-congreso.png')}}">
     <link rel="shortcut icon" href="{{asset('img/favicon.ico')}}">
+
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
@@ -52,7 +56,6 @@
                   <small class="bg-red">Linea</small>
                   <!--<span class="hidden-xs">Usuario</span>-->
                   <p>{{Auth::user()->name." ".Auth::user()->apellidos}}</p>
-
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
@@ -130,7 +133,7 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="configuracion/usuario"><i class="fa fa-circle-o"></i> Ver Registros</a></li>
+                <li><a href="{{url('registro/log')}}"><i class="fa fa-circle-o"></i> Ver Registros</a></li>
                 
               </ul>
             </li>
