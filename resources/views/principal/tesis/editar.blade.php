@@ -2,6 +2,9 @@
 @section ('contenido')
 
     <div class="row">
+        {!!Form::model($tesis,['method'=>'PATCH','route'=>['tesis.update',$tesis->id]])!!}
+        {!! Form::hidden('urlBuscarUsuario', url('administracion/usuario/buscar'),array('id' => 'urlBuscarUsuario')) !!}
+        {{Form::token()}}
         <div class="col-lg-6 col-md-6 col-sm6 col-xs-12 ">
             <h3> Editar Tesis</h3>
             @if(count($errors)>0)
@@ -14,9 +17,7 @@
                 </div>
             @endif
 
-            {!!Form::model($tesis,['method'=>'PATCH','route'=>['tesis.update',$tesis->id]])!!}
-            {!! Form::hidden('urlBuscarUsuario', url('administracion/usuario/buscar'),array('id' => 'urlBuscarUsuario')) !!}
-            {{Form::token()}}
+
             <div class="row">
                 <div class="form-group{{ $errors->has('titulo') ? ' has-error' : '' }}">
                     <label for="titulo" class="col-md-6 control-label">Título</label>
@@ -98,30 +99,56 @@
             </div>
 
 
+        </div>
+        <div class="col-xs-12">
             <div class="table-responsibe">
                 <table class="table">
                     <thead>
                     <tr>
                         <th></th>
+                        <th class="hidden"></th>
                         <th>Nombre</th>
                         <th>Apellido</th>
+                        <th>Jurado</th>
+                        <th>Asesor</th>
+                        <th>Alumno</th>
                     </tr>
                     </thead>
                     <tbody id="tbodyUsuariosTesis">
-                        @foreach($tesis->usuario_tesis as $u)
-                            <tr>
-                                <td>
-                                    <a href='#' class='btn btn-danger' onclick='eliminar_usuario("{{$u->user->id}}", this, event)'>Eliminar</a>
-                                </td>
-                                <td>{{$u->user->id}}</td>
-                                <td>{{$u->user->name}}</td>
-                                <td>{{$u->user->apellidos}}</td>
-                            </tr>
-                        @endforeach
+                    @foreach($tesis->usuario_tesis as $u)
+                        <tr>
+                            <td>
+                                <a href='#' class='btn btn-danger' onclick='eliminar_usuario("{{$u->user->id}}", this, event)'>Eliminar</a>
+                            </td>
+                            <td class="hidden">{{$u->user->id}}</td>
+                            <td>{{$u->user->name}}</td>
+                            <td>{{$u->user->apellidos}}</td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" {{$u->rol == 3 ? "checked" : ""}} disabled>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="2" {{$u->rol == 2 ? "checked" : ""}} disabled>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="3" {{$u->rol == 1 ? "checked" : ""}} disabled>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>
-
             <div id="listaUsuarios">
                 @foreach($tesis->usuario_tesis as $u)
                     <input name="usuario_id[]" type="hidden" value="{{$u->user->id}}" />
@@ -129,12 +156,11 @@
             </div>
             <div class="from-group">
                 <button class="btn btn-primary" type="submit">Guardar</button>
-                <button class="btn btn-danger" type="reset">Cancelar</button>
+                <a href="{{URL::action('TesisController@index')}}" class="btn btn-danger" type="reset">Cancelar</a>
 
             </div>
-
-            {!!Form::close()!!}
         </div>
+        {!!Form::close()!!}
     </div>
 
     @include('principal.tesis.modal')
