@@ -159,6 +159,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Caffeinated\Shinobi\ShinobiServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Codedge\Fpdf\FpdfServiceProvider::class,
         
     ],
 
@@ -208,6 +209,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class,
         
 
     ],

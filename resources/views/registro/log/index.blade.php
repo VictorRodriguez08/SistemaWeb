@@ -45,7 +45,9 @@
 							<a href="{{URL::action('LogController@show',$l->id)}}"><button class="btn btn-info">Ver</button></a>
 						</td>
 
-							
+						
+					
+			           	
 									
 						 
 					</tr>
@@ -55,9 +57,8 @@
 				
 			</table>
 			<td>
-					
-            <a href="{{URL::action('LogController@pdf',$l->id)}}"><button class="btn btn-info">Ver R</button></a>
-							</td>	
+			 <a href="{{URL::action('LogController@pdf')}}"><button class="btn btn-info">Ver R</button></a>
+			</td>
 									
         
 			
