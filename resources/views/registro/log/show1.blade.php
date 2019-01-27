@@ -9,6 +9,7 @@
   <thead>
     <tr>
       <th>ID</th>
+      <th>Nombre del usuario</th>
       <th>Nombre Tabla </th>
       <th>Accion Realizada </th>
       <th>Fecha: </th>
@@ -18,6 +19,7 @@
     @foreach($logs as $l)
       <tr>
         <td>{{ $l->id }}</td>
+        <td>{{ $l->user_n}}{{" "}}{{ $l->user_a}}</td>
         <td>{{ $l->nombre_tabla }}</td>
         <td>{{ $l->accion_realizada }}</td>
         <td>{{ $l->created_at }}</td>

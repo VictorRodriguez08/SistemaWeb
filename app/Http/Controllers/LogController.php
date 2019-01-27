@@ -53,7 +53,12 @@ class LogController extends Controller
             ->orderBy('id','desc')
             ->paginate(5);
             
-            return view('registro.log.index',["logs"=>$logs,"searchText"=>$query,"searchText1"=>$query1]);
+            if($request->get('esPdf') == "true"){
+                $pdf=PDF::loadView('registro.log.show1',array('logs' => $logs));
+                return $pdf->stream('logs.pdf');
+            }else{
+                return view('registro.log.index',["logs"=>$logs,"searchText"=>$query,"searchText1"=>$query1]);
+            }
         } 	
     }
 
@@ -68,12 +73,7 @@ class LogController extends Controller
         return $pdf->stream('logs');
     }
 
-    public function pdf()
-    {
-      $logs=Log::all();
-     $pdf=PDF::loadView('registro.log.show1',array('logs' => $logs));
-      return $pdf->stream('logs.pdf');
-    }
+
 
 
 

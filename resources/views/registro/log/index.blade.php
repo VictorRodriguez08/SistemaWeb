@@ -56,9 +56,7 @@
 				</tbody>
 				
 			</table>
-			<td>
-			 <a href="{{URL::action('LogController@pdf')}}"><button class="btn btn-info">Ver R</button></a>
-			</td>
+			
 									
         
 			
