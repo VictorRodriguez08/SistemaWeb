@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Redirect;
 
 use sistemaWeb\Http\Requests\UsuarioFormRequest;
 use sistemaWeb\Http\Controllers\Controller;
-use Barryvdh\DomPDF\Facade as PDF;
+//use Barryvdh\DomPDF\Facade as PDF;
+use Codedge\Fpdf\Facades\Fpdf as Fpdf;
+use PDF;
 
 
 
@@ -66,17 +68,11 @@ class LogController extends Controller
         return $pdf->stream('logs');
     }
 
-       public function pdf($id)
+    public function pdf()
     {
-      $logs = Log::all($id); 
-      
-        $view = PDF::loadView('registro/log/show1', compact('logs'));
-
-        $pdf=\App::make('dompdf.wrapper');
-        $pdf->loadHTML($view);
-        return $pdf->stream('logs.pdf');
-
-        
+      $logs=Log::all();
+     $pdf=PDF::loadView('registro.log.show1',array('logs' => $logs));
+      return $pdf->stream('logs.pdf');
     }
 
 

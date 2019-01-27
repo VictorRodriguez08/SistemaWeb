@@ -26,7 +26,7 @@ Route::get('administracion/rol/create/{id}','RolController@create');
 
 Route::resource('registro/log','LogController');
 Route::get('/','LogController@index')->name('logs');
-Route::get('descargar','LogController@pdf')->name('log.pdf');
+Route::get('descargar','LogController@pdf');
 
 
 Route::auth();

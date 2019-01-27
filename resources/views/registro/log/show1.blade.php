@@ -5,14 +5,26 @@
 </head>
 <body>
 	<h1>Reporte de actividad de Usuario</h1>
-<div>
-	<div><span>ID: </span>{{ $logs->id}}</div>	
-	<div><span>Nombre de la tabla :  </span>{{ $logs->nombre_tabla}}</div>	
-	<div><span>Accion Realiazada :  </span>{{ $logs->accion_realizada}}</div>	
-	<div><span>Fecha que se realizo :  </span>{{ $logs->created_at}}</div>	
-
-	</div>
-	
+	<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre Tabla </th>
+      <th>Accion Realizada </th>
+      <th>Fecha: </th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach($logs as $l)
+      <tr>
+        <td>{{ $l->id }}</td>
+        <td>{{ $l->nombre_tabla }}</td>
+        <td>{{ $l->accion_realizada }}</td>
+        <td>{{ $l->created_at }}</td>
+      </tr>
+    @endforeach
+  </tbody>
+</table>
 	
 
 </body>
