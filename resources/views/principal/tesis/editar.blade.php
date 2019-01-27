@@ -168,3 +168,6 @@
     @include('principal.tesis.modal')
 @endsection
 
+@section ('scripts')
+    <script src="{{asset('js/tesis.js')}}"></script>
+@endsection
