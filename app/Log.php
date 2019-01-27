@@ -3,7 +3,7 @@
 namespace sistemaWeb;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class Log extends Model
 {
      protected $table='log';
@@ -23,5 +23,19 @@ class Log extends Model
 	 protected $guarded=[
 
 	 ];
+
+	 public static function buscar($query, $query1){
+	 	return self::from('log as l')
+            ->join('users as u','l.id_user','=','u.id')
+            ->select('l.id','l.nombre_tabla','u.name as user_n','u.apellidos as user_a','u.email as email','l.accion_realizada','l.updated_at','l.created_at')
+            ->where(DB::raw('CONCAT(u.name," ",u.apellidos)'),'LIKE',"'%".$query."%'" )
+            ->orwhere(function($sql) use ($query,$query1){
+                $sql->where('l.created_at','>=', "'" . $query . " 00:00:00'")
+                ->where('l.created_at','<=', "'". $query1 . " 23:59:59'");
+            })
+            ->orwhere('u.email','LIKE',"'%".$query."%'")
+            ->orderBy('id','desc')
+            ->paginate(5);
+	 }
 
 }

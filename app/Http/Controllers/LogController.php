@@ -36,23 +36,8 @@ class LogController extends Controller
         {
             $query=trim($request->get('searchText'));
             $query1=trim($request->get('searchText1'));
-            $logs=DB::table('log as l')
-            ->join('users as u','l.id_user','=','u.id')
-            ->select('l.id','l.nombre_tabla','u.name as user_n','u.apellidos as user_a','u.email as email','l.accion_realizada','l.updated_at','l.created_at')
-
-            ->where ('l.created_at','LIKE','%'.$query.'%')
-            ->orwhere(DB::raw('CONCAT(u.name," ",u.apellidos)'),'LIKE',"%".$query."%" )
-            ->orwhere('u.name','LIKE','%'.$query.'%')
-            ->orwhere('u.apellidos','LIKE','%'.$query.'%')
-            ->orwhere ('l.created_at','LIKE','%'.$query.'%')
-            ->orwhere('l.updated_at','LIKE','%'.$query.'%')
-            ->orwhere(DB::raw('CONCAT(u.name," ",u.apellidos," ",l.created_at," ",l.updated_at)'),'LIKE',"%".$query."%" )
-            ->orwhere('u.email','LIKE','%'.$query.'%')
-            ->orwhere(DB::raw('CONCAT(l.created_at," ",l.created_at)'),'LIKE',"%".$query."%" )
-                     
-            ->orderBy('id','desc')
-            ->paginate(5);
-            
+            $logs=Log::buscar($query, $query1);
+            return $logs;
             if($request->get('esPdf') == "true"){
                 $pdf=PDF::loadView('registro.log.show1',array('logs' => $logs));
                 return $pdf->stream('logs.pdf');
