@@ -57,6 +57,7 @@ class TesisController extends Controller
                 $tesis->fecha_fin = $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
                 $tesis->save();
 
+                Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis creada con id: '.$tesis->id);
                 foreach ($request->input('usuario_id') as $usuario_id) {
                      $usuario = new Usuario_tesis();
                     $usuario->user_id = explode('_',$usuario_id)[0];
@@ -64,6 +65,8 @@ class TesisController extends Controller
                      $usuario->tesis_id = $tesis->id;
 
                      $usuario->save();
+
+                    Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
                  }
             \DB::commit();
             return redirect('tesis/')->with('message', 'Tesis creada correctamente');
@@ -125,6 +128,7 @@ class TesisController extends Controller
 
             $tesis->save();
 
+            Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis actualizada con id: '.$tesis->id);
             Usuario_tesis::eliminar_por_tesis($id);
 
 
@@ -136,6 +140,8 @@ class TesisController extends Controller
                 $usuario->tesis_id = $tesis->id;
 
                 $usuario->save();
+
+                Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
             }
 
             \DB::commit();
@@ -159,6 +165,8 @@ class TesisController extends Controller
             \DB::beginTransaction();
                 Usuario_tesis::eliminar_por_tesis($id);
                 \DB::table('tesis')->where('id', '=' , $id)->delete();
+
+                Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis eliminado con id: '.$id);
             \DB::commit();
             return redirect('tesis/')->with('message', 'Tesis eliminada correctamente');
         }catch(\Exception $e){

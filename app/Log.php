@@ -47,4 +47,11 @@ class Log extends Model
 	 	
 	 }
 
+	 public static function agregar_log($nombre_tabla, $id, $accion){
+         Log::create([
+             'nombre_tabla'=>$nombre_tabla,
+             'id_user'=>$id,
+             'accion_realizada'=> $accion]);
+     }
+
 }
