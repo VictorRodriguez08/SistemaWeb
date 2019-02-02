@@ -10,6 +10,12 @@
             <div class="modal-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-stripped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th></th>
+                            </tr>
+                        </thead>
                         <tbody id="tablaListaUsuarios">
 
                         </tbody>

@@ -1,12 +1,20 @@
+@php
+    $total_alumnos = 0;
+    $total_asesores = 0;
+    $total_jurados = 0;
+    $correlativo = 0;
+@endphp
+
 @extends ('layouts.admin')
 @section ('contenido')
-
-
     <div class="row">
         {!!Form::model($tesis,['method'=>'PATCH','route'=>['tesis.update',$tesis->id]])!!}
         {!! Form::hidden('urlBuscarUsuario', url('administracion/usuario/buscar'),array('id' => 'urlBuscarUsuario')) !!}
         {{Form::token()}}
-        <input type="hidden" value="{{Config('app.estados_tesis')}}" id="estados_tesis">
+        <input type="hidden" value="{{$ESTADOS_TESIS->PERFIL}}" id="PERFIL">
+        <input type="hidden" value="{{$ESTADOS_TESIS->ANTEPROYECTO}}" id="ANTEPROYECTO">
+        <input type="hidden" value="{{$ESTADOS_TESIS->TESIS}}" id="TESIS">
+
         <div class="col-lg-6 col-md-6 col-sm6 col-xs-12 ">
             <h3> Editar Tesis</h3>
             @if(count($errors)>0)
@@ -25,11 +33,10 @@
                     <label for="titulo" class="col-md-6 control-label">Título</label>
                     <div class="col-md-6">
                         <input id="titulo" type="text" class="form-control" name="titulo" value="{{$tesis->titulo }}">
-
                         @if ($errors->has('titulo'))
                             <span class="help-block">
-                                        <strong>{{ $errors->first('titulo') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('titulo') }}</strong>
+                            </span>
                         @endif
                     </div>
                     <br>
@@ -50,8 +57,8 @@
 
                         @if ($errors->has('estado_id'))
                             <span class="help-block">
-                                        <strong>{{ $errors->first('estado_id') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('estado_id') }}</strong>
+                            </span>
                         @endif
                     </div>
                     <br>
@@ -67,8 +74,8 @@
 
                         @if ($errors->has('fecha_ini'))
                             <span class="help-block">
-                                        <strong>{{ $errors->first('fecha_ini') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('fecha_ini') }}</strong>
+                            </span>
                         @endif
                     </div>
                     <br>
@@ -80,12 +87,12 @@
                 <div class="form-group{{ $errors->has('fecha_fin') ? ' has-error' : '' }}">
                     <label for="fecha_fin" class="col-md-6 control-label">Fecha fin</label>
                     <div class="col-md-6">
-                        <input id="fecha_fin" class="datepicker" name="fecha_fin" value="{{ date('d-m-Y',strtotime($tesis->fecha_fin ))}}">
+                        <input id="fecha_fin" class="datepicker" name="fecha_fin" value="{{ $tesis->fecha_fin != null ? date('d-m-Y',strtotime($tesis->fecha_fin )) : ""}}">
 
                         @if ($errors->has('fecha_fin'))
                             <span class="help-block">
-                                        <strong>{{ $errors->first('fecha_fin') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('fecha_fin') }}</strong>
+                            </span>
                         @endif
                     </div>
                     <br>
@@ -120,7 +127,7 @@
                     @foreach($tesis->usuario_tesis as $u)
                         <tr>
                             <td>
-                                <a href='#' class='btn btn-danger' onclick='eliminar_usuario("{{$u->user->id}}", this, event)'>Eliminar</a>
+                                <a href='#' class='btn btn-danger' onclick='eliminar_usuario("{{$u->user->id}}","{{$u->rol}}", this, event)'>Eliminar</a>
                             </td>
                             <td class="hidden">{{$u->user->id}}</td>
                             <td>{{$u->user->name}}</td>
@@ -128,21 +135,21 @@
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" {{$u->rol == 3 ? "checked" : ""}} disabled>
+                                        <input type="radio" name="optionsRadios{{++$correlativo}}" value="1" {{$u->rol == 3 ? "checked" : ""}} disabled>
                                     </label>
                                 </div>
                             </td>
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="2" {{$u->rol == 2 ? "checked" : ""}} disabled>
+                                        <input type="radio" name="optionsRadios{{$correlativo}}" value="2" {{$u->rol == 2 ? "checked" : ""}} disabled>
                                     </label>
                                 </div>
                             </td>
                             <td>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="3" {{$u->rol == 1 ? "checked" : ""}} disabled>
+                                        <input type="radio" name="optionsRadios{{$correlativo}}" value="3" {{$u->rol == 1 ? "checked" : ""}} disabled>
                                     </label>
                                 </div>
                             </td>
@@ -153,7 +160,20 @@
             </div>
             <div id="listaUsuarios">
                 @foreach($tesis->usuario_tesis as $u)
-                    <input name="usuario_id[]" type="hidden" value="{{$u->user->id}}" />
+                    <input name="usuario_id[]" type="hidden" value="{{$u->user->id}}_{{$u->rol}}" />
+                    @php
+                        switch($u->rol){
+                            case 1:
+                            ++$total_alumnos;
+                            break;
+                            case 2:
+                            ++$total_asesores;
+                            break;
+                            case 3:
+                            ++$total_jurados;
+                            break;
+                        }
+                    @endphp
                 @endforeach
             </div>
             <div class="from-group">
@@ -169,5 +189,25 @@
 @endsection
 
 @section ('scripts')
+    <script>
+        let SOLO_PERFIL = true;
+    </script>
     <script src="{{asset('js/tesis.js')}}"></script>
+    <script>
+        maximo_alumnos = parseInt("{{$total_alumnos}}");
+        maximo_asesores = parseInt("{{$total_asesores}}");
+        maximo_jurados = parseInt("{{$total_jurados}}");
+        $(document).ready(function(){
+           SOLO_PERFIL = "{{$tesis->estado_id == 1 ? 'true': 'false'}}";
+           SOLO_PERFIL = SOLO_PERFIL === "true";
+           $('#estado_id').change(function(){
+              if(parseInt($(this).val()) === 1){
+                SOLO_PERFIL = true;
+              } else{
+                  SOLO_PERFIL = false;
+              }
+           });
+           correlativo = parseInt("{{++$correlativo}}");
+        });
+    </script>
 @endsection

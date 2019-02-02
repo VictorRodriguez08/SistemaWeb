@@ -21,9 +21,9 @@
 					@foreach ($tesis as $t)
 						<tr>
 							<td>{{ $t->titulo}}</td>
-							<td>{{ $t->estado->estado}}</td>
+							<td>{{ $t->estado}}</td>
 							<td>{{ date('d-m-Y',strtotime($t->fecha_ini))}}</td>
-							<td>{{ date('d-m-Y',strtotime($t->fecha_fin))}}</td>
+							<td>{{ $t->fecha_fin!= null ? date('d-m-Y',strtotime($t->fecha_fin)) : ""}}</td>
 							<td>
 								<a href="#" class="btn btn-info" onclick="ver_usuarios_tesis({{$t->id}}, event)">Ver Usuarios</a>
 							</td>
@@ -55,4 +55,5 @@
 			})
 		</script>
 	@endif
+	<script src="{{asset('js/tesis_index.js')}}"></script>
 @endsection

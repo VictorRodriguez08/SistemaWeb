@@ -26,23 +26,27 @@ $(document).ready(function(){
 			});
 			return false;
 		}else{
-		 if(maximo_asesores !== 1){
-			 Swal({
-				 type: 'error',
-				 title: 'Agregar Tesis',
-				 text: 'El número de asesores debe ser igual a 1'
-			 });
-			 return false;
-		 } else{
-			 if(maximo_jurados !== 3){
-				 Swal({
-					 type: 'error',
-					 title: 'Agregar Tesis',
-					 text: 'El número de jurados debe ser igual a 3'
-				 });
-				 return false;
-			 }
-		 }
+			if(!SOLO_PERFIL){
+				if(maximo_asesores !== 1){
+					Swal({
+						type: 'error',
+						title: 'Agregar Tesis',
+						text: 'El número de asesores debe ser igual a 1'
+					});
+					return false;
+				} else{
+					if(parseInt(SelectEstados.val()) === parseInt(TESIS)){
+						if(maximo_jurados !== 3){
+							Swal({
+								type: 'error',
+								title: 'Agregar Tesis',
+								text: 'El número de jurados debe ser igual a 3'
+							});
+							return false;
+						}
+					}
+				}
+			}
 		}
 	});
 
@@ -83,31 +87,34 @@ function seleccionar_usuario(element){
 		var tipo_agregado = 0;
 
         if(SelectEstados.val() === PERFIL && verificar_disponibilidad(ALUMNO)){
-                check_alumno = true;
-                maximo_alumnos++;
-                tipo_agregado = 1;
-                if(verificar_disponibilidad(ASESOR)){
-					$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').removeAttr('disabled');
-					$('#estado_id').find('option[value="' + TESIS + '"]').attr('disabled','disabled');
-				}else{
-					$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
-					$('#estado_id').find('option[value="' + TESIS + '"]').removeAttr('disabled');
-				}
+			check_alumno = true;
+			maximo_alumnos++;
+			tipo_agregado = 1;
+			if(verificar_disponibilidad(ASESOR)){
+				$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').removeAttr('disabled');
+				$('#estado_id').find('option[value="' + TESIS + '"]').attr('disabled','disabled');
+			}else{
+				$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
+				$('#estado_id').find('option[value="' + TESIS + '"]').removeAttr('disabled');
+			}
         }
 
-		if(SelectEstados.val() === ANTEPROYECTO && verificar_disponibilidad(ASESOR)){
-			check_asesor = true;
-			maximo_asesores++;
-			tipo_agregado = 2;
-			$('#estado_id').find('option[value="' + TESIS + '"]').attr('disabled','disabled');
-		}
+        if(!SOLO_PERFIL){
+			if(SelectEstados.val() === ANTEPROYECTO && verificar_disponibilidad(ASESOR)){
+				check_asesor = true;
+				maximo_asesores++;
+				tipo_agregado = 2;
+				$('#estado_id').find('option[value="' + TESIS + '"]').attr('disabled','disabled');
+			}
 
-		if(SelectEstados.val() === TESIS && verificar_disponibilidad(JURADO)){
-			check_jurado = true;
-			maximo_jurados++;
-			tipo_agregado = 3;
-			$('#estado_id').find('option[value="' + PERFIL + '"]').attr('disabled','disabled');
-			$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
+			if(SelectEstados.val() === TESIS && verificar_disponibilidad(JURADO)){
+				check_jurado = true;
+				maximo_jurados++;
+				tipo_agregado = 3;
+				$('#estado_id').find('option[value="' + PERFIL + '"]').attr('disabled','disabled');
+				$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
+			}
+
 		}
 
 		if(check_alumno || check_asesor || check_jurado){
@@ -132,7 +139,7 @@ function seleccionar_usuario(element){
 			datos += "</tr>";
 			$('#tbodyUsuariosTesis').append(datos);
 
-			var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + '">';
+			var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + "_" + tipo_agregado +'">';
 			$('#listaUsuarios').append(usuario);
 			maximo_tesis++;
 		}
@@ -184,6 +191,7 @@ function mostrar_error_maximo(){
 
 function eliminar_usuario(id, tipo_eliminado, element, event){
 	event.preventDefault();
+	tipo_eliminado = parseInt(tipo_eliminado);
 	var hijos = $('#listaUsuarios').children();
 	var fila = $(element).closest('tr');
 	$.each(hijos, function(indice, valor){
@@ -224,21 +232,4 @@ function usuario_existe(id){
 		}
 	});
 	return result;
-}
-
-function ver_usuarios_tesis(id, event){
-	event.preventDefault();
-	$('#tablaListaUsuarios').html('');
-	$.get($('#urlListarUsuarios').val() + "/" + id,function(result){
-		var datos = "";
-		$.each(result, function(indice, valor){
-			datos += "<tr>";
-				datos += "<td>";
-				datos += valor.nombre;
-				datos += "</td>";
-			datos += "</tr>";
-		});
-		$('#tablaListaUsuarios').html(datos);
-		$('#modalListaUsuarios').modal('show');
-	});
 }

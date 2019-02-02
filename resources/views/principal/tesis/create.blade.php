@@ -36,30 +36,10 @@
                             </div>
                             <br>
                             <br>
-
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group{{ $errors->has('estado_id') ? ' has-error' : '' }}">
-                            <label for="estado_id" class="col-md-6 control-label">Estado</label>
-                            <div class="col-md-6">
-                                <select name="estado_id" id="estado_id" class="form-control">
-                                    <option value="">seleccione un estado</option>
-                                    @foreach($estados as $estado)
-                                        <option value="{{$estado->id}}">{{$estado->estado}}</option>
-                                    @endforeach
-                                </select>
-
-                                @if ($errors->has('estado_id'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('estado_id') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <br>
-                            <br>
-
-                        </div>
+                                <input type="hidden" name="estado_id" id="estado_id" value="{{$ESTADOS_TESIS->PERFIL}}">
                     </div>
                     <div class="row">
                         <div class="form-group{{ $errors->has('fecha_ini') ? ' has-error' : '' }}">
@@ -135,5 +115,8 @@
 @endsection
 
 @section ('scripts')
+    <script>
+        let SOLO_PERFIL = true;
+    </script>
     <script src="{{asset('js/tesis.js')}}"></script>
 @endsection
