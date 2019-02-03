@@ -24,6 +24,7 @@
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{asset('css/dropzone.min.css')}}" rel="stylesheet" type="text/css" />
 
   </head>
   <body class="hold-transition skin-green sidebar-mini">
@@ -216,6 +217,7 @@
     <script src="{{asset('js/sweetalert2.js')}}"></script>
  <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
  <script src="https://unpkg.com/gijgo@1.9.11/js/messages/messages.es-es.js" type="text/javascript"></script>
+ <script src="{{asset('js/dropzone.js')}}" type="text/javascript"></script>
     @yield('scripts')
     <script>
       $(document).ready(function(){

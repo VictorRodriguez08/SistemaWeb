@@ -15,6 +15,7 @@
 						<th>Fecha Fin</th>
 						<th></th>
 						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -24,6 +25,7 @@
 							<td>{{ $t->estado}}</td>
 							<td>{{ date('d-m-Y',strtotime($t->fecha_ini))}}</td>
 							<td>{{ $t->fecha_fin!= null ? date('d-m-Y',strtotime($t->fecha_fin)) : ""}}</td>
+							<td><a href="{{URL::action('TesisController@show',$t->id)}}" class="btn btn-default">Detalles</a></td>
 							<td>
 								<a href="#" class="btn btn-info" onclick="ver_usuarios_tesis({{$t->id}}, event)">Ver Usuarios</a>
 							</td>

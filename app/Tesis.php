@@ -24,4 +24,8 @@ class Tesis extends Model
             ->orderBy('tesis.id', 'desc')
             ->get();
     }
+
+    public function archivos_tesis(){
+        return $this->hasMany('sistemaWeb\ArchivosTesis');
+    }
 }

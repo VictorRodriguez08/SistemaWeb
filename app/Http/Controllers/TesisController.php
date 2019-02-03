@@ -4,6 +4,7 @@ namespace sistemaWeb\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use sistemaWeb\ArchivosTesis;
 use sistemaWeb\EstadosTesis;
 use sistemaWeb\Http\Requests;
 use sistemaWeb\Tesis;
@@ -85,7 +86,8 @@ class TesisController extends Controller
      */
     public function show($id)
     {
-        //
+        $tesis = Tesis::find($id);
+        return view('principal.tesis.show',['tesis'=>$tesis]);
     }
 
     /**
@@ -197,5 +199,37 @@ class TesisController extends Controller
             );
         }
         return $nombre_usuarios;
+    }
+
+    public function SubirArchivo(Request $request){
+        $file = $request->file('archivo');
+        $id = $request->input('tesis_id');
+        $tipo_archivo = $request->input('tipo_archivo');
+        $destinationPath = 'uploads/tesis/archivos/' . $id;
+        $archivoTesis = new ArchivosTesis();
+        $archivoTesis->nombre_archivo = $file->getClientOriginalName();
+        $archivoTesis->tesis_id = $id;
+        $archivoTesis->tipo = $tipo_archivo;
+        $archivoTesis->save();
+
+        $file->move($destinationPath,$file->getClientOriginalName());
+        return json_encode(array('id'=>$archivoTesis->id));
+    }
+
+    public function EliminarArchivo($id_tesis, $id){
+        $nombre_archivo = ArchivosTesis::find($id)->nombre_archivo;
+        try{
+            \DB::beginTransaction();
+
+            \DB::table('archivos_tesis')->where('id', '=' , $id)->delete();
+
+            Log::agregar_log('tabla Archivos Tesis',Auth()->user()->id, 'Archivo eliminado con id: '.$id);
+            \DB::commit();
+            unlink('uploads/tesis/archivos/'. $id_tesis . "/" . $nombre_archivo);
+            return 'ok';
+        }catch(\Exception $e){
+            \DB::rollback();
+        }
+        return 'error';
     }
 }
