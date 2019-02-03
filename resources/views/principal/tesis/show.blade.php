@@ -1,12 +1,12 @@
 @extends ('layouts.admin')
 @section ('contenido')
     <div class="row">
-        <div class="col-sm-10">Titulo</div>
-        <div class="col-sm-2">Estado</div>
+        <div class="col-sm-10"><b>Titulo: </b>{{$tesis->titulo}}</div>
+        <div class="col-sm-2"><b>Estado: </b>{{$tesis->estado->estado}}</div>
     </div>
     <div class="row">
-        <div class="col-sm-6">Fecha de Inicio</div>
-        <div class="col-sm-6">Fecha fin</div>
+        <div class="col-sm-6"><b>Fecha de Inicio:</b> {{ date('d-m-Y',strtotime($tesis->fecha_ini))}}</div>
+        <div class="col-sm-6"><b>Fecha fin:</b> {{ $tesis->fecha_fin!= null ? date('d-m-Y',strtotime($tesis->fecha_fin)) : ""}} </div>
     </div>
     <hr>
     <div class="row">
@@ -19,6 +19,26 @@
                 </tr>
                 </thead>
                 <tbody>
+                    @foreach($tesis->usuario_tesis as $usuario)
+                        @php
+                            $rol ="";
+                            switch($usuario->rol){
+                                case 1:
+                                    $rol="Alumno";
+                                break;
+                                case 2:
+                                    $rol="Asesor";
+                                break;
+                                case 3:
+                                    $rol="Jurado";
+                                break;
+                            }
+                        @endphp
+                        <tr>
+                            <td>{{$usuario->user->name}} {{$usuario->user->apellidos}}</td>
+                            <td><b>{{$rol}}</b></td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -145,6 +165,8 @@
                 salida += "</tr>";
 
                 $('#tbodyListaArchivos').append(salida);
+                $('#dropzoneArchivo').addClass('hidden');
+                myDropzone.removeAllFiles();
 
             });
 
@@ -165,6 +187,8 @@
                 salida += "</tr>";
 
                 $('#tbodyListaArchivos').append(salida);
+                $('#dropzoneObservaciones').addClass('hidden');
+                myDropzone2.removeAllFiles();
             });
         });
 
