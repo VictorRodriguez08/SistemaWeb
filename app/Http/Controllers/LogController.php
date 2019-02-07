@@ -16,9 +16,6 @@ use sistemaWeb\Http\Controllers\Controller;
 //use Barryvdh\DomPDF\Facade as PDF;
 use Codedge\Fpdf\Facades\Fpdf as Fpdf;
 use PDF;
-
-
-
 use DB;
 
 
@@ -37,7 +34,7 @@ class LogController extends Controller
             $query=trim($request->get('searchText'));
             $query1=trim($request->get('searchText1'));
             $logs=Log::buscar($query, $query1);
-            return $logs;
+            //return $logs;
             if($request->get('esPdf') == "true"){
                 $pdf=PDF::loadView('registro.log.show1',array('logs' => $logs));
                 return $pdf->stream('logs.pdf');
