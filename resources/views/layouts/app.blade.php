@@ -27,6 +27,7 @@
     </style>
 </head>
 <body id="app-layout">
+    
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -55,6 +56,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
+
                         <li><a href="{{ url('/login') }}">Iniciar Sesión</a></li>
                         
                     @else

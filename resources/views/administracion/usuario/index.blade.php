@@ -5,19 +5,9 @@
 		<h3>Listado de Usuarios <a href="usuario/create"> <button class="btn btn-success">Nuevo</button></a></h3>
 		@include('administracion.usuario.search')
 	</div>
+	<input type="hidden" value="{{url('usuario/GetUsuarios')}}" id="urlListarUsuario">
 </div>
-<div class="row">
-	<div class="col-lg-6 col-md-6 col-sm-6 col-sx-12">
-		<div class="form-group">
-			<label>Usuarios</label>
-			<select name="id" class="form-control">
-				@foreach ($usuarios as $us)
-					<option value="{{$us->id}}">{{$us->name}} {{$us->apellidos}}</option>					
-				@endforeach
-			</select>
-		</div>
-	</div>
-</div>
+
 
 <div class="row">
 	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -46,16 +36,20 @@
 						<td>{{ $u->email}}</td>
 						<th colspan="3">&nbsp</th>
 						<td>
-							<a href="{{URL::action('UsuarioController@show',$u->id)}}"><button class="btn btn-info">Ver</button></a>
+							
+							<a href="#" data-target="#modal_lista_usuarios-delete-{{$u->id}}" data-toggle="modal" title="Mostrar">
+								<button type="button" class="btn btn-primary btn-sm">Mostrar</button>
+							</a>
 						</td>
 						<td>
-							<a href="{{URL::action('UsuarioController@edit',$u->id)}}"><button class="btn btn-info">Editar</button></a>
+							<a href="{{URL::action('UsuarioController@edit',$u->id)}}"><button class="btn btn-warning">Editar</button></a>
 						</td>
 						<td>
 							<a href="" data-target="#modal-delete-{{$u->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>
 						</td>
 					</tr>
 					@include('administracion.usuario.modal')
+					@include('administracion.usuario.modal_lista_usuarios')
 				@endforeach
 				</tbody>
 				
@@ -65,4 +59,21 @@
 		{{$usuarios->render()}}
 	</div>
 </div>
+
+
+@endsection
+
+@section ('scripts')
+	@if (Session::has('message'))
+		<script>
+			$(document).ready(function(){
+				Swal({
+					title: 'Usuarios',
+					text: "{{ Session::get('message') }}",
+					timer:5000
+				});
+			})
+		</script>
+	@endif
+	<script src="{{asset('js/usuario_index.js')}}"></script>
 @endsection

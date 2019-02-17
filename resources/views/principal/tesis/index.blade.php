@@ -15,15 +15,17 @@
 						<th>Fecha Fin</th>
 						<th></th>
 						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach ($tesis as $t)
 						<tr>
 							<td>{{ $t->titulo}}</td>
-							<td>{{ $t->estado->estado}}</td>
+							<td>{{ $t->estado}}</td>
 							<td>{{ date('d-m-Y',strtotime($t->fecha_ini))}}</td>
-							<td>{{ date('d-m-Y',strtotime($t->fecha_fin))}}</td>
+							<td>{{ $t->fecha_fin!= null ? date('d-m-Y',strtotime($t->fecha_fin)) : ""}}</td>
+							<td><a href="{{URL::action('TesisController@show',$t->id)}}" class="btn btn-default">Detalles</a></td>
 							<td>
 								<a href="#" class="btn btn-info" onclick="ver_usuarios_tesis({{$t->id}}, event)">Ver Usuarios</a>
 							</td>
@@ -41,6 +43,7 @@
 		</div>
 	</div>
 	@include('principal.tesis.modal_lista_usuarios')
+	
 @endsection
 
 @section ('scripts')
@@ -55,4 +58,5 @@
 			})
 		</script>
 	@endif
+	<script src="{{asset('js/tesis_index.js')}}"></script>
 @endsection

@@ -43,13 +43,7 @@
 						<th colspan="3">&nbsp</th>
 						<td>
 							<a href="{{URL::action('LogController@show',$l->id)}}"><button class="btn btn-info">Ver</button></a>
-						</td>
-
-						
-					
-			           	
-									
-						 
+						</td>						 
 					</tr>
 					
 				@endforeach

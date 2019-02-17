@@ -10,8 +10,6 @@ use sistemaWeb\Rol;
 use Illuminate\Support\Facades\Redirect;
 use sistemaWeb\Http\Request\RolRequest;
 use DB;
-use sistemaWeb\User;
-
 
 class RolController extends Controller
 {

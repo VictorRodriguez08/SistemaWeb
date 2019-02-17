@@ -37,6 +37,8 @@ class UsuarioController extends Controller
         return view('administracion.usuario.show',["usuarios"=>$usuarios]);
     }
 
+
+
     public function buscar($criterio=""){
         return User::buscar($criterio);
     }
@@ -66,12 +68,7 @@ class UsuarioController extends Controller
         $emailController = new MailController();
         $emailController->email($usuario->id);
 
-        Log::create([
-            'nombre_tabla'=>'tabla Usuario',
-            'id_user'=>Auth()->user()->id,
-            'accion_realizada'=>'Usuario creado con id: '.$usuario->id
-
-        ]);
+        Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario creado con id: '.$usuario->id);
 
     	return Redirect::to('administracion/usuario');
     }
@@ -97,12 +94,7 @@ class UsuarioController extends Controller
     	$usuario->otros_email=$request->get('otros_email');
     	$usuario->update();
 
-        Log::create([
-            'nombre_tabla'=>'tabla Usuario',
-            'id_user'=>Auth()->user()->id,
-            'accion_realizada'=>'Usuario modificado con id: '.$usuario->id
-            
-        ]);
+        Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario modificado con id: '.$usuario->id);
 
     	return Redirect::to('administracion/usuario');
 
@@ -112,13 +104,15 @@ class UsuarioController extends Controller
     {
     	$usuario =DB::table('users')->where('id', '=' , $id)->delete();
 
-            Log::create([
-            'nombre_tabla'=>'tabla Usuario',
-            'id_user'=>Auth()->user()->id,
-            'accion_realizada'=>'Usuario eliminado con id: '.$usuario->id
-            
-        ]);
+    	Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario eliminado con id: ' .$usuario->id);
     	return Redirect::to('administracion/usuario');
 
+    }
+
+    public function GetUsuarios($id){
+        $usuario = User::find($id);
+        
+        $nombres_ape[] = array('nombre'=>$usuario->name." ". $usuario->user->apellidos);
+        return $nombre_ape;
     }
 }

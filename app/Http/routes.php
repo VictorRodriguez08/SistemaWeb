@@ -21,12 +21,19 @@ Route::get('administracion/usuario/buscar/{criterio?}', 'UsuarioController@busca
 Route::resource('estados','EstadosController');
 Route::resource('tesis','TesisController');
 Route::get('tesis/GetUsuariosTesis/{id}','TesisController@GetUsuariosTesis');
+
+Route::get('usuario/GetUsuarios/{id}','UsuarioController@GetUsuarios');
+Route::post('tesis/SubirArchivo/','TesisController@SubirArchivo');
+Route::post('tesis/EliminarArchivo/{tesis_id}/{id?}','TesisController@EliminarArchivo');
 Route::get('sendmail/{id}','MailController@email');
 Route::get('administracion/rol/create/{id}','RolController@create');
 
 Route::resource('registro/log','LogController');
 Route::get('/','LogController@index')->name('logs');
 Route::get('descargar/{searchText}','LogController@pdf');
+Route::resource('inicio','InicioController');
+Route::resource('congreso','CongresoController');
+
 
 
 Route::auth();

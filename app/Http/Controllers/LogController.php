@@ -31,10 +31,22 @@ class LogController extends Controller
     {
          if ($request)
         {
+            $rango_fechas = false;
             $query=trim($request->get('searchText'));
+            preg_match('/^\d{2}\-\d{2}\-\d{4}$/', $query, $fecha_inicial);
+            preg_match('/^\d{2}\-\d{2}\-\d{4}$/', $query, $fecha_final);
+            
+            if(count($fecha_inicial) > 0 && count($fecha_final) > 0){
+                $rango_fechas = true;
+            }
+
             $query1=trim($request->get('searchText1'));
+
             $logs=Log::buscar($query, $query1);
             //return $logs;
+
+            $logs=Log::buscar($query, $query1, $rango_fechas);
+
             if($request->get('esPdf') == "true"){
                 $pdf=PDF::loadView('registro.log.show1',array('logs' => $logs));
                 return $pdf->stream('logs.pdf');

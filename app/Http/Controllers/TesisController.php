@@ -4,10 +4,12 @@ namespace sistemaWeb\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use sistemaWeb\ArchivosTesis;
 use sistemaWeb\EstadosTesis;
 use sistemaWeb\Http\Requests;
 use sistemaWeb\Tesis;
 use sistemaWeb\Estado;
+use sistemaWeb\Log;
 use sistemaWeb\Http\Requests\TesisRequest;
 use sistemaWeb\Usuario_tesis;
 
@@ -20,7 +22,7 @@ class TesisController extends Controller
      */
     public function index()
     {
-        $tesis = Tesis::all();
+        $tesis = Tesis::obtener_todos();
         return view('principal.tesis.index',['tesis'=>$tesis]);
     }
 
@@ -31,7 +33,7 @@ class TesisController extends Controller
      */
     public function create()
     {
-        $estadostesis = new EstadosTesis();;
+        $estadostesis = new EstadosTesis();
 
         $estados = Estado::all();
         return view('principal.tesis.create',['estados'=>$estados, 'ESTADOS_TESIS'=>$estadostesis]);
@@ -53,14 +55,19 @@ class TesisController extends Controller
                 $tesis->titulo = $request->input('titulo');
                 $tesis->estado_id = $request->input('estado_id');
                 $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
-                $tesis->fecha_fin =  date('Y-m-d', strtotime($request->input('fecha_fin')));
+                $tesis->fecha_fin = $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
                 $tesis->save();
 
+                Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis creada con id: '.$tesis->id);
                 foreach ($request->input('usuario_id') as $usuario_id) {
                      $usuario = new Usuario_tesis();
-                     $usuario->user_id = $usuario_id;
+                    $usuario->user_id = explode('_',$usuario_id)[0];
+                    $usuario->rol = explode('_',$usuario_id)[1];
                      $usuario->tesis_id = $tesis->id;
+
                      $usuario->save();
+
+                    Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
                  }
             \DB::commit();
             return redirect('tesis/')->with('message', 'Tesis creada correctamente');
@@ -79,7 +86,8 @@ class TesisController extends Controller
      */
     public function show($id)
     {
-        //
+        $tesis = Tesis::find($id);
+        return view('principal.tesis.show',['tesis'=>$tesis]);
     }
 
     /**
@@ -92,7 +100,14 @@ class TesisController extends Controller
     {
         $estados = Estado::all();
         $tesis = Tesis::find($id);
-        return view('principal.tesis.editar',['estados'=>$estados, 'tesis'=>$tesis]);
+        $estadostesis = new EstadosTesis();
+
+        return view('principal.tesis.editar',
+            [
+                'estados'=>$estados,
+                'tesis'=>$tesis,
+                'ESTADOS_TESIS'=>$estadostesis
+            ]);
     }
 
     /**
@@ -108,20 +123,27 @@ class TesisController extends Controller
         $tesis->titulo = $request->input('titulo');
         $tesis->estado_id = $request->input('estado_id');
         $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
-        $tesis->fecha_fin =  date('Y-m-d', strtotime($request->input('fecha_fin')));
+        $tesis->fecha_fin =  $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
 
         try{
             \DB::beginTransaction();
 
             $tesis->save();
 
+            Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis actualizada con id: '.$tesis->id);
             Usuario_tesis::eliminar_por_tesis($id);
+
+
 
             foreach ($request->input('usuario_id') as $usuario_id) {
                 $usuario = new Usuario_tesis();
-                $usuario->user_id = $usuario_id;
+                $usuario->user_id = explode('_',$usuario_id)[0];
+                $usuario->rol = explode('_',$usuario_id)[1];
                 $usuario->tesis_id = $tesis->id;
+
                 $usuario->save();
+
+                Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
             }
 
             \DB::commit();
@@ -145,6 +167,8 @@ class TesisController extends Controller
             \DB::beginTransaction();
                 Usuario_tesis::eliminar_por_tesis($id);
                 \DB::table('tesis')->where('id', '=' , $id)->delete();
+
+                Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis eliminado con id: '.$id);
             \DB::commit();
             return redirect('tesis/')->with('message', 'Tesis eliminada correctamente');
         }catch(\Exception $e){
@@ -157,10 +181,55 @@ class TesisController extends Controller
         $tesis = Tesis::find($id);
         $nombre_usuarios = [];
         foreach ($tesis->usuario_tesis as $usuario){
+            $rol = "";
+            switch($usuario->rol){
+                case 1:
+                    $rol = "Alumno";
+                    break;
+                case 2:
+                    $rol = "Asesor";
+                    break;
+                case 3:
+                    $rol = "Jurado";
+                    break;
+            }
             $nombre_usuarios[] = array(
-                'nombre'=>$usuario->user->name . " " . $usuario->user->apellidos
+                'nombre'=>$usuario->user->name . " " . $usuario->user->apellidos,
+                'rol'=>$rol
             );
         }
         return $nombre_usuarios;
+    }
+
+    public function SubirArchivo(Request $request){
+        $file = $request->file('archivo');
+        $id = $request->input('tesis_id');
+        $tipo_archivo = $request->input('tipo_archivo');
+        $destinationPath = 'uploads/tesis/archivos/' . $id;
+        $archivoTesis = new ArchivosTesis();
+        $archivoTesis->nombre_archivo = $file->getClientOriginalName();
+        $archivoTesis->tesis_id = $id;
+        $archivoTesis->tipo = $tipo_archivo;
+        $archivoTesis->save();
+
+        $file->move($destinationPath,$file->getClientOriginalName());
+        return json_encode(array('id'=>$archivoTesis->id));
+    }
+
+    public function EliminarArchivo($id_tesis, $id){
+        $nombre_archivo = ArchivosTesis::find($id)->nombre_archivo;
+        try{
+            \DB::beginTransaction();
+
+            \DB::table('archivos_tesis')->where('id', '=' , $id)->delete();
+
+            Log::agregar_log('tabla Archivos Tesis',Auth()->user()->id, 'Archivo eliminado con id: '.$id);
+            \DB::commit();
+            unlink('uploads/tesis/archivos/'. $id_tesis . "/" . $nombre_archivo);
+            return 'ok';
+        }catch(\Exception $e){
+            \DB::rollback();
+        }
+        return 'error';
     }
 }
