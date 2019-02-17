@@ -21,6 +21,18 @@ class User extends Authenticatable
         return $this->hasMany('sistemaWeb\Usuario_tesis');
     }
 
+    public function rol(){
+        return $this->hasMany('sistemaWeb\RoleUser');
+    }
+
+    public function primer_rol(){
+        $primer_rol = $this->rol()->first();
+        if($primer_rol == null){
+            $primer_rol = new RoleUser();
+        }
+        return $primer_rol;
+    }
+
     public static function buscar($criterio=""){
     	if($criterio!='all'){
 	    	return User::whereRaw(DB::raw("concat(name, ' ', apellidos) like '%" . $criterio . "%'"))->get();

@@ -4,14 +4,36 @@ namespace sistemaWeb\Http\Controllers;
 
 use sistemaWeb\Http\Controllers\Controllers;
 use Mail;
+use sistemaWeb\User;
 
 class MailController extends Controller {
-    public function email($id) {
+    private $asunto = "Sistema Web de Gestión y Publicacion de Investigaciones";
+    private $from = "vers0891@gmail.com";
+    private $subject = "";
+    private $vista="";
+
+    public function notificacion_usuario_nuevo($id) {
+        $usuario = User::find($id);
         $data = array('id'=>$id);
-        Mail::send('administracion.emails.email', $data, function($message) {
-            $message->to('vers0891@gmail.com', 'Email de prueba')->subject
-            ('Laravel HTML Testing Mail');
-            $message->from('vers0891@gmail.com','Tesis');
+        $this->subject = "Notificación nuevo Usuario registrado";
+        $this->vista ='administracion.emails.email';
+
+        $this->send_mail($data,$usuario);
+    }
+    public function notificacion_activacion_usuario($id) {
+        $data = array('id'=>$id);
+        $usuario = User::find($id);
+        $this->subject = "Notificación Activación de Usuario";
+        $this->vista ='administracion.emails.notificacion_activacion_usuario';
+
+        $this->send_mail($data,$usuario);
+    }
+
+    private function send_mail($data, $usuario){
+        Mail::send($this->vista, $data, function($message) use ($usuario) {
+            $message->to($usuario->email, $this->asunto)->subject
+            ($this->subject);
+            $message->from($this->from,$this->asunto);
         });
     }
 }

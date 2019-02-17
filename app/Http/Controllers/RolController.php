@@ -10,6 +10,7 @@ use sistemaWeb\Rol;
 use Illuminate\Support\Facades\Redirect;
 use sistemaWeb\Http\Request\RolRequest;
 use DB;
+use sistemaWeb\User;
 
 class RolController extends Controller
 {
@@ -28,10 +29,9 @@ class RolController extends Controller
     	}
     }
 
-    public function create($id)
+    public function create()
     {
-        $usuario = User::find($id);
-    	return view("administracion.rol.create",['usuario'=>$usuario]);
+
     }
 
     public function store(RolRequest $request)
@@ -42,15 +42,11 @@ class RolController extends Controller
     	return Redirect::to('administracion/rol');
     }
 
-    public function show($id)
-    {
-    	return view("administracion.rol.show",["rol"=>Rol::finOrFail($id)]);
-    }
-
     public function edit($id)
     {
     	return view("administracion.rol.edit",["rol"=>Rol::finOrFail($id)]);
     }
+
     public function update(RolRequest $request,$id)
     {
     	$rol=Rol::findOrFail($id);

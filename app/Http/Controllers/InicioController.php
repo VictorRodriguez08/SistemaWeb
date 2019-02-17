@@ -13,7 +13,6 @@ class InicioController extends Controller
 {
     public function __contruct()
     {
-
     }
 
     public function index()
@@ -23,7 +22,7 @@ class InicioController extends Controller
 
     public function create()
     {
-       
+        return view('auth.register');
     }
 
     public function store()

@@ -3,14 +3,21 @@
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 			<h3>Editar Usuario: {{ $usuario->name}}</h3>
-			@if (count($errors)>0)
-			<div class="alert alert-danger">
-				<ul>
-				@foreach ($errors->all() as $error)
-					<li>{{$error}}</li>
-				@endforeach
-				</ul>
-			</div>
+			@if (count($errors)>0 || isset($excepcion))
+                <div class="alert alert-danger">
+                    @if(count($errors)>0)
+                        <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                        </ul>
+
+                    @endif
+
+                    @if(isset($excepion))
+                        {{$excepcion}}
+                    @endif
+                </div>
 			@endif
 
 			{!!Form::model($usuario,['method'=>'PATCH','route'=>['administracion.usuario.update',$usuario->id]])!!}
@@ -67,39 +74,48 @@
                             
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Contraseña</label>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="chkCambiarClave" name="cambiarClave" value="true"> Cambiar Contraseña
+                            </label>
+                        </div>
+                        <div id="divClave" class="hidden">
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                <label for="password" class="col-md-4 control-label">Contraseña</label>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
+                                <div class="col-md-6">
+                                    <input id="password" type="password" class="form-control" name="password">
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
-                                @endif
+                                    @endif
+                                </div>
+                                <br>
+                                <br>
+
                             </div>
-                            <br>
-                            <br>
-                            
-                        </div>
 
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirmar Contraseña</label>
+                            <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                <label for="password-confirm" class="col-md-4 control-label">Confirmar Contraseña</label>
 
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                                <div class="col-md-6">
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
 
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
+                                    @if ($errors->has('password_confirmation'))
+                                        <span class="help-block">
                                         <strong>{{ $errors->first('password_confirmation') }}</strong>
                                     </span>
-                                @endif
+                                    @endif
+                                </div>
+                                <br>
+                                <br>
+
                             </div>
-                            <br>
-                            <br>
-                            
+
                         </div>
+
 
                         <div class="form-group{{ $errors->has('direccion') ? ' has-error' : '' }}">
                             <label for="direccion" class="col-md-4 control-label">Direccion</label>
@@ -217,14 +233,54 @@
                             <br>
                             
                         </div>
-
-            <div class="form-group">
-            	<button class="btn btn-primary" type="submit">Guardar</button>
-            	<button class="btn btn-danger" type="reset">Cancelar</button>
-            </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="select_rol">Rol</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="select_rol" name="role_id" class="form-control" required>
+                                <option value="">--Seleccione un Rol--</option>
+                                @foreach($roles as $rol)
+                                    <option value="{{$rol->id}}" {{ $rol->id == $usuario->primer_rol()->role_id ? "selected":"" }}>{{$rol->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="select_estado">Estado</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="select_estado" name="estado_id" class="form-control" required>
+                                <option value="">--Seleccione un Estado--</option>
+                                <option value="1"  {{ $usuario->estado == 1 ? "selected":"" }}>Activo</option>
+                                <option value="0"  {{ $usuario->estado == 0 ? "selected":"" }}>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br><br><br>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Guardar</button>
+                        <button class="btn btn-danger" type="reset">Cancelar</button>
+                    </div>
 
 			{!!Form::close()!!}		
             
 		</div>
 	</div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            $('#chkCambiarClave').change(function(){
+                if($(this).is(':checked')){
+                    $('#divClave').removeClass('hidden')
+                }else{
+                    $('#divClave').addClass('hidden')
+                }
+            });
+        });
+    </script>
 @endsection

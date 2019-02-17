@@ -26,17 +26,21 @@ class UsuarioFormRequest extends Request
         if ($this->method()=='PATCH')
         {
             $email_r='required|string|email|max:255|unique:users,id'.$this->get('id');
+            $password = 'min:6|confirmed';
         }
         else
         {
             $email_r='required|string|email|max:255|unique:users,email';
+            $password = 'required|min:6|confirmed';
         }
+
+
         return [
             'name'=>'required|max:100',
             'apellidos'=>'required|max:100',
             //'email'=>'required|string|email|max:255|unique:users,email'.$this->id,
             'email'=>$email_r,
-            'password'=>'required|min:6|confirmed',
+            'password'=>$password,
             'direccion'=>'required|max:200',
             'titulo'=>'required|max:100',
             'otros_estudios'=>'max:100',

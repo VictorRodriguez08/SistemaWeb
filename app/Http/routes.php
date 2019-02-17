@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-	return view('auth/login');
-});
+Route::get('/','InicioController@Index');
 
 Route::resource('administracion/rol','RolController');
 Route::resource('administracion/usuario','UsuarioController');
@@ -29,7 +27,7 @@ Route::get('sendmail/{id}','MailController@email');
 Route::get('administracion/rol/create/{id}','RolController@create');
 
 Route::resource('registro/log','LogController');
-Route::get('/','LogController@index')->name('logs');
+Route::get('/log','LogController@index')->name('logs');
 Route::get('descargar/{searchText}','LogController@pdf');
 Route::resource('inicio','InicioController');
 Route::resource('congreso','CongresoController');

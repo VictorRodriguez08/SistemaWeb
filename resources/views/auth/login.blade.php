@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <div class="container">
     <div class="row">
 
@@ -47,17 +44,18 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="remember"> Recordar
+                                    </label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
+                            <div class="col-md-6">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-btn fa-sign-in" ></i> Iniciar Sesión
                                 </button>
-
                                 <a class="btn btn-link" href="{{ url('/password/reset') }}">¿ Olvidaste tu contraseña ?</a>
+                                <a class="btn btn-link" href="{{ url('/inicio/create') }}">Registrarse</a>
                             </div>
                         </div>
                     </form>
@@ -77,7 +75,7 @@
 
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                         <label for="email" >Correo Electronico</label>
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
+                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"/>
                             @if ($errors->has('email'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -87,7 +85,7 @@
 
                     <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                         <label for="password" >Contraseña</label>
-                            <input id="password" type="password" class="form-control" name="password">
+                            <input id="password" type="password" class="form-control" name="password" />
 
                             @if ($errors->has('password'))
                                 <span class="help-block">
@@ -102,8 +100,9 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="remember"> Recordar
-                                </div>
+                                </label>
                             </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -111,20 +110,30 @@
                             <button type="submit" class="btn btn-primary">
                               <i class="fa fa-btn fa-sign-in" ></i> Iniciar Sesión
                              </button>
-                        
-                            </div>
                         </div>
+                    </div>
                     <div class="form-group">
                         <div class="row">
-                        <div class="col-lg-12">
-                            <div class="text-center">
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">¿ Olvidaste tu contraseña ?</a>
+                            <div class="col-lg-12">
+                                <div class="text-center">
+                                    <a class="btn btn-link" href="{{ url('/password/reset') }}">¿ Olvidaste tu contraseña ?</a>
+                                </div>
                             </div>
                         </div>
-                        
                     </div>
 
-                    <input type="hidden" class="hide" name="token" id="token" value="a465a2791ae0bae853cf4bf485dbe1b6">
+                     <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="text-center">
+                                    <a class="btn btn-link" href="{{ url('/inicio/create') }}">Registrarse</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" class="hide" name="token" id="token" value="a465a2791ae0bae853cf4bf485dbe1b6" />
+
                 </form>
             </div>
         </ul>

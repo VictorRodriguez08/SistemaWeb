@@ -55,93 +55,101 @@
               <li class="dropdown user user-menu">
                 @if (Auth::guest())
 
-                       <!-- <li><a href="{{ url('/login') }}">Iniciar Sesión</a></li>-->
-                     <li class="dropdown">
-                        <a href="http://phpoll.com/login" class="dropdown-toggle" data-toggle="dropdown">Iniciar Sesión <span class="caret"></span></a>
-                        <ul class="dropdown-menu dropdown-lr animated slideInRight" role="menu">
-                            <div class="col-lg-12">
-                                <div class="text-center"><h3><b>Iniciar Sesión</b></h3></div>
-                                <form id="ajax-login-form" role="form" method="POST" action="{{ url('/login') }}" >
-                                    {{ csrf_field() }}
+                   <!-- <li><a href="{{ url('/login') }}">Iniciar Sesión</a></li>-->
+                 <li class="dropdown">
+                    <a href="http://phpoll.com/login" class="dropdown-toggle" data-toggle="dropdown">Iniciar Sesión <span class="caret"></span></a>
+                    <ul class="dropdown-menu dropdown-lr animated slideInRight" role="menu">
+                        <div class="col-lg-12">
+                            <div class="text-center"><h3><b>Iniciar Sesión</b></h3></div>
+                            <form id="ajax-login-form" role="form" method="POST" action="{{ url('/login') }}" >
+                                {{ csrf_field() }}
 
-                                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                        <label for="email" >Correo Electronico</label>
-                                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-                                            @if ($errors->has('email'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('email') }}</strong>
-                                                </span>
-                                            @endif
-                                    </div>
+                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                    <label for="email" >Correo Electronico</label>
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                        @if ($errors->has('email'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                        @endif
+                                </div>
 
-                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                        <label for="password" >Contraseña</label>
-                                            <input id="password" type="password" class="form-control" name="password">
+                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                    <label for="password" >Contraseña</label>
+                                        <input id="password" type="password" class="form-control" name="password">
 
-                                            @if ($errors->has('password'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('password') }}</strong>
-                                                </span>
-                                            @endif
+                                        @if ($errors->has('password'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('password') }}</strong>
+                                            </span>
+                                        @endif
 
-                                    </div>
+                                </div>
 
-                                    <div class="form-group">
-                                        <div class="col-md-6 col-md-offset-4">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="remember"> Recordar
-                                                </div>
-                                            </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                         <div class="col-md-6 col-md-offset-4">
-                                            <button type="submit" class="btn btn-primary">
-                                              <i class="fa fa-btn fa-sign-in" ></i> Iniciar Sesión
-                                             </button>
-                                        
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-4">
+                                        <div class="checkbox">
+                                            <div>
+                                                <input type="checkbox" name="remember"> Recordar
                                             </div>
                                         </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="text-center">
-                                                <a class="btn btn-link" href="{{ url('/password/reset') }}">¿ Olvidaste tu contraseña ?</a>
-                                            </div>
-                                        </div>
-                                        
                                     </div>
+                                </div>
 
-                                    <input type="hidden" class="hide" name="token" id="token" value="a465a2791ae0bae853cf4bf485dbe1b6">
-                                </form>
-                            </div>
+                                <div class="form-group">
+                                     <div class="col-md-6 col-md-offset-4">
+                                        <button type="submit" class="btn btn-primary">
+                                          <i class="fa fa-btn fa-sign-in" ></i> Iniciar Sesión
+                                         </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="text-center">
+                                            <a class="btn btn-link" href="{{ url('/password/reset') }}">¿ Olvidaste tu contraseña ?</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="text-center">
+                                            <a class="btn btn-link" href="{{ url('/administracion/usuario/create') }}">Registrarse</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" class="hide" name="token" id="token" value="a465a2791ae0bae853cf4bf485dbe1b6">
+                            </form>
+                        </div>
+                    </ul>
+                </li>
+
+                @else
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            {{ Auth::user()->name." ".Auth::user()->apellidos }} <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ url('/logout') }}" style="color:black;"><i class="fa fa-btn fa-sign-out" ></i>Cerrar Sesión</a></li>
                         </ul>
                     </li>
-                        
-                    @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name." ".Auth::user()->apellidos }} <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Cerrar Sesión</a></li>
-                            </ul>
-                        </li>
-                    @endif
-  
-                  </li>
+                @endif
                 </ul>
               </li>
-              
+
             </ul>
           </div>
 
         </nav>
       </header>
-      <!-- Left side column. contains the logo and sidebar -->
-      <aside class="main-sidebar">
+
+          <!-- Left side column. contains the logo and sidebar -->
+          <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
           <!-- Sidebar user panel -->
@@ -149,7 +157,7 @@
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
             <li class="header"></li>
-            
+              @if(!Auth::guest())
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-lock"></i>
@@ -195,6 +203,7 @@
                 
               </ul>
             </li>
+              @endif
              <li>
               <a href="#">
                 <i class="fa fa-plus-square"></i> <span>Ayuda</span>
@@ -231,7 +240,6 @@
                   <h3 class="box-title">Sistema Web</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
                 </div>
@@ -239,15 +247,8 @@
                 <div class="box-body">
                   	<div class="row">
 	                  	<div class="col-md-12">
-		                          
-                              <!--Contenido dinamico para agregar create show update delete-->
-
                               @yield('contenido')
-		                          <!--Fin Contenido-->
                         </div>
-                        </div>
-		                    
-                  		</div>
                   	</div><!-- /.row -->
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -261,9 +262,8 @@
         <div class="pull-right hidden-xs">
           <b>Version</b> 1.0
         </div>
-       
       </footer>
-
+    </div>
       
     <!-- jQuery 2.1.4 -->
     <script src="{{asset('js/jQuery-2.1.4.min.js')}}"></script>
@@ -272,9 +272,11 @@
     <!-- AdminLTE App -->
     <script src="{{asset('js/app.min.js')}}"></script>
     <script src="{{asset('js/sweetalert2.js')}}"></script>
- <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
- <script src="https://unpkg.com/gijgo@1.9.11/js/messages/messages.es-es.js" type="text/javascript"></script>
- <script src="{{asset('js/dropzone.js')}}" type="text/javascript"></script>
+
+     <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+     <script src="https://unpkg.com/gijgo@1.9.11/js/messages/messages.es-es.js" type="text/javascript"></script>
+     <script src="{{asset('js/dropzone.js')}}" type="text/javascript"></script>
+
     @yield('scripts')
     <script>
       $(document).ready(function(){
