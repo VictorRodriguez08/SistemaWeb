@@ -12,6 +12,7 @@ use sistemaWeb\Estado;
 use sistemaWeb\Log;
 use sistemaWeb\Http\Requests\TesisRequest;
 use sistemaWeb\Usuario_tesis;
+use sistemaWeb\User;
 
 class TesisController extends Controller
 {
@@ -48,10 +49,11 @@ class TesisController extends Controller
     public function store(TesisRequest $request)
     {
         $error = "";
+
         try{
             \DB::beginTransaction();
 
-            $tesis = new Tesis();
+                $tesis = new Tesis();
                 $tesis->titulo = $request->input('titulo');
                 $tesis->estado_id = $request->input('estado_id');
                 $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
@@ -69,6 +71,20 @@ class TesisController extends Controller
 
                     Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
                  }
+
+
+                foreach ($request->input('usuario_id') as $usuario_id) {
+                    $user_id = explode('_',$usuario_id)[0];
+                    $rol = explode('_',$usuario_id)[1];
+                    $user = User::find($user_id);
+                    $nombre_usuario = $user->name . " " . $user->apellidos;
+
+                    $emailController = new MailController();
+                    $emailController->notificacion_agregado_investigacion($user_id,$tesis->titulo,$nombre_usuario,$rol);
+
+                    Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
+                }
+
             \DB::commit();
             return redirect('tesis/')->with('message', 'Tesis creada correctamente');
         }catch(\Exception $e){
@@ -125,15 +141,18 @@ class TesisController extends Controller
         $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
         $tesis->fecha_fin =  $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
 
+        $lista_usuario_notificados = array();
+
+        $excepcion = "";
         try{
             \DB::beginTransaction();
 
             $tesis->save();
 
             Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis actualizada con id: '.$tesis->id);
+            $lista_usuario_notificados = $tesis->usuario_tesis;
+
             Usuario_tesis::eliminar_por_tesis($id);
-
-
 
             foreach ($request->input('usuario_id') as $usuario_id) {
                 $usuario = new Usuario_tesis();
@@ -146,13 +165,46 @@ class TesisController extends Controller
                 Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
             }
 
+            foreach ($request->input('usuario_id') as $usuario_id) {
+                $user_id = explode('_',$usuario_id)[0];
+                if(!$this->usuario_notificacion_enviada($lista_usuario_notificados, $user_id)){
+                    $rol = explode('_',$usuario_id)[1];
+                    $user = User::find($user_id);
+                    $nombre_usuario = $user->name . " " . $user->apellidos;
+
+                    $emailController = new MailController();
+                    $emailController->notificacion_agregado_investigacion($user_id,$tesis->titulo,$nombre_usuario,$rol);
+                }
+            }
+
+            Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
+
             \DB::commit();
+
             return redirect('tesis/')->with('message', 'Tesis actualizada correctamente');
         }catch(\Exception $e){
             \DB::rollback();
+            $excepcion = $e->getMessage();
+            echo $excepcion;
+            return;
         }
+
         $estados = Estado::all();
-        return view('principal.tesis.editar',['estados'=>$estados, 'tesis'=>$tesis]);
+        return view('principal.tesis.editar',[
+            'estados'=>$estados,
+            'tesis'=>$tesis,
+            'ESTADOS_TESIS'=>new EstadosTesis(),
+            'excepcion'=>$excepcion
+        ]);
+    }
+
+    private function usuario_notificacion_enviada($lista, $id_usuario){
+        foreach ($lista as $item) {
+            if($item->user_id == $id_usuario){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

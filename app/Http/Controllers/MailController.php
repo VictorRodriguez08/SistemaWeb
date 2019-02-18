@@ -29,6 +29,17 @@ class MailController extends Controller {
         $this->send_mail($data,$usuario);
     }
 
+    public function notificacion_agregado_investigacion($id,$nombre_investigacion,$nombre_usuario, $tipo_usuario_investigacion) {
+        $data = array('id'=>$id,'nombre_investigacion'=>$nombre_investigacion,'nombre_usuario'=>$nombre_usuario,'tipo'=>$tipo_usuario_investigacion);
+
+        $usuario = User::find($id);
+        $this->subject = "Agregado a " . $nombre_investigacion;
+
+        $this->vista ='administracion.emails.notificacion_agregado_investigacion';
+
+        $this->send_mail($data,$usuario);
+    }
+
     private function send_mail($data, $usuario){
         Mail::send($this->vista, $data, function($message) use ($usuario) {
             $message->to($usuario->email, $this->asunto)->subject

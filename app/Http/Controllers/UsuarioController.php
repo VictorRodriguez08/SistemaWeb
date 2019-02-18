@@ -125,12 +125,11 @@ class UsuarioController extends Controller
                 $emailController = new MailController();
                 $emailController->notificacion_activacion_usuario($usuario->id);
             }
+
             return Redirect::to('administracion/usuario');
         }catch( \Exception $e){
             \DB::rollback();
             $excepcion = $e->getMessage();
-            echo $excepcion;
-            return 'test';
         }
 
         $rol = Rol::all();

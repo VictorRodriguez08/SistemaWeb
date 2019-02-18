@@ -17,13 +17,20 @@
 
         <div class="col-lg-6 col-md-6 col-sm6 col-xs-12 ">
             <h3> Editar Tesis</h3>
-            @if(count($errors)>0)
+            @if (count($errors)>0 || isset($excepcion))
                 <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{$error}}</li>
-                        @endforeach
-                    </ul>
+                    @if(count($errors)>0)
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{$error}}</li>
+                            @endforeach
+                        </ul>
+
+                    @endif
+
+                    @if(isset($excepion))
+                        {{$excepcion}}
+                    @endif
                 </div>
             @endif
 
