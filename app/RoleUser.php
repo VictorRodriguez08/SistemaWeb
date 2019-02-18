@@ -12,6 +12,10 @@ class RoleUser extends Model
         return $this->belongsTo('sistemaWeb\User');
     }
 
+    public function rol(){
+        return $this->belongsTo('sistemaWeb\Rol');
+    }
+
     public static function eliminar_por_usuario($id_usuario){
         self::where('user_id',"=", $id_usuario)->delete();
     }

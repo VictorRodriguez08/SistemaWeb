@@ -13,12 +13,15 @@ class MailController extends Controller {
     private $vista="";
 
     public function notificacion_usuario_nuevo($id) {
-        $usuario = User::find($id);
-        $data = array('id'=>$id);
-        $this->subject = "Notificación nuevo Usuario registrado";
-        $this->vista ='administracion.emails.email';
+        $usuarios = User::obtener_administradores();
 
-        $this->send_mail($data,$usuario);
+        foreach ($usuarios as $usuario){
+            $data = array('id'=>$usuario->id);
+            $this->subject = "Notificación nuevo Usuario registrado";
+            $this->vista ='administracion.emails.email';
+
+            $this->send_mail($data,$usuario);
+        }
     }
     public function notificacion_activacion_usuario($id) {
         $data = array('id'=>$id);

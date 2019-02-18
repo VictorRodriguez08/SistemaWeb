@@ -21,4 +21,8 @@ class Rol extends Model
 
 	 ];
 
+    public function rol_usuario(){
+        return $this->hasMany('sistemaWeb\RoleUser');
+    }
+
 }
