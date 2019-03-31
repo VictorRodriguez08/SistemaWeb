@@ -37,4 +37,4 @@ Route::resource('congreso','CongresoController');
 Route::auth();
 
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'InicioController@index');

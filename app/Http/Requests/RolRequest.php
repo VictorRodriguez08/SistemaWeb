@@ -24,8 +24,7 @@ class RolRequest extends Request
     public function rules()
     {
         return [
-            //
-            'rol'=>'required|max:30'
+            'rol'    => 'required|regex:/^[a-zA-ZáÁéÉíÍóÓúÚñÑüÜ ]+$/',
         ];
     }
 }

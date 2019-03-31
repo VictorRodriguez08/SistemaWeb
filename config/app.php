@@ -3,6 +3,8 @@
 return [
 
     'estados_tesis' => array("PERFIL"=>1,"ANTEPROYECTO"=>2, "TESIS"=>3),
+    'operaciones_crud' => array('Listar','Crear','Actualizar','Eliminar'),
+    'menus_disponibles' => array('Tesis','Congresos','Seguridad'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -157,7 +159,7 @@ return [
         sistemaWeb\Providers\EventServiceProvider::class,
         sistemaWeb\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Caffeinated\Shinobi\ShinobiServiceProvider::class,
+        //Caffeinated\Shinobi\ShinobiServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Codedge\Fpdf\FpdfServiceProvider::class,
         

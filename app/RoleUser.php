@@ -13,7 +13,7 @@ class RoleUser extends Model
     }
 
     public function rol(){
-        return $this->belongsTo('sistemaWeb\Rol');
+        return $this->belongsTo('sistemaWeb\Role');
     }
 
     public static function eliminar_por_usuario($id_usuario){

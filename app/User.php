@@ -2,20 +2,33 @@
 
 namespace sistemaWeb;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use DB;
+
 class User extends Authenticatable
 {
-  
-    protected $table='users';
-    protected $primaryKey='id';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'name','apellidos','email','password','direccion','titulo','otros_estudios','fecha_nac','dui','telefonos','otros_email',
+        'name', 'email', 'password',
     ];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $table='users';
+
 
     public function usuario_tesis(){
         return $this->hasMany('sistemaWeb\Usuario_tesis');
@@ -53,5 +66,60 @@ class User extends Authenticatable
     	}else{
     		return User::all();
     	}
+    }
+
+    public function roles()
+    {
+        return $this
+            ->belongsToMany('sistemaWeb\Role')
+            ->withTimestamps();
+    }
+
+    public function authorizeRoles($roles)
+    {
+        if ($this->hasAnyRole($roles)) {
+            return true;
+        }
+        abort(401, 'Esta acción no está autorizada.');
+    }
+
+    public function hasAnyRole($roles)
+    {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
+                    return true;
+                }
+            }
+        } else {
+            if ($this->hasRole($roles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasRole($role)
+    {
+        if ($this->roles()->where('name', $role)->first()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if User has access to $permisos.
+     * @param array $permisos
+     * @return bool
+     */
+    public function hasAccess(array $permisos)
+    {
+        // check if the permission is available in any role
+        foreach ($this->roles as $role) {
+            if($role->hasAccess($permisos)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
