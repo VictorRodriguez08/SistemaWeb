@@ -11,6 +11,7 @@
 			<table class="table table-striped table-bordered table-condensed table-hover">
 				<thead>
 					<tr>
+						<th>ID</th>
 						<th>Nombre de Autor</th>
 						<th>Congreso</th>
 						<th>Carrera</th>
@@ -24,7 +25,8 @@
 				<tbody>
 					@foreach ($autores_congresos as $ac)
 						<tr>
-							<td>{{ $ac->user_n}}{{" "}}{{ $ac->user_a}}</td>
+							<td>{{$ac->id}}</td>
+							<td>{{ $ac->user_n}}{{" "}}{{ $ac->user_a}}{{",  "}}{{ $ac->user_n1}}{{" "}}{{ $ac->user_a1}}{{",  "}}{{ $ac->user_n3}}{{" "}}{{ $ac->user_a3}}</td>
 							<td>{{ $ac->con}}</td>
 							<td>{{ $ac->carrera}}</td>
 							<td>{{ $ac->tema}}</td>
@@ -37,7 +39,7 @@
 								<a href="" data-target="#modal-delete-{{$ac->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>
 							</td>
 						</tr>
-						@include('principal.autorescongreso.modal_eliminar')
+						@include('principal.autores_congreso.modal_eliminar')
 					@endforeach
 				</tbody>
 			</table>
