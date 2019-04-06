@@ -1,8 +1,27 @@
+@php
+	$puede_editar = false;
+    $puede_eliminar = false;
+    $puede_mostrar = false;
+    if (Gate::allows('actualizar-seguridad')) {
+        $puede_editar = true;
+    }
+    if (Gate::allows('eliminar-seguridad')) {
+        $puede_eliminar = true;
+    }
+
+     if (Gate::allows('listar-seguridad')) {
+        $puede_mostrar = true;
+    }
+@endphp
+
+
 @extends ('layouts.admin')
 @section ('contenido')
 <div class="row">
 	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+		@can('crear-seguridad', auth()->user())
 		<h3>Listado de Congresos <a href="congreso/create"> <button class="btn btn-success">Nuevo</button></a></h3>
+		@endcan
 		@include('principal.congreso.search')
 	</div>
 </div>
@@ -29,7 +48,9 @@
 							<td>{{ date('d-m-Y',strtotime($c->fecha_fin))}}</td>
 							<th colspan="3">&nbsp</th>
 							<td>
+								@if($puede_editar)
 								<a href="{{URL::action('CongresoController@edit',$c->id)}}"><button class="btn btn-warning">Editar</button></a>
+								@endif
 							</td>
 							<td>
 								<a href="" data-target="#modal-delete-{{$c->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>

@@ -6,7 +6,7 @@ return [
     'operaciones_crud' => array('Listar','Crear','Actualizar','Eliminar'),
     'operaciones_menu' => array('Usuarios','Asignar_roles','Registrar_congresos','Adminsitrar_Congreso','Registrar_Tesis','Ver_Revisiones','Ver_Registros'),
     'menu_p'=> array('Menu'),
-    'menus_disponibles' => array('Tesis','Congresos','Seguridad'),
+    'menus_disponibles' => array('Tesis','Congresos','Seguridad','Registro'),
 
     /*
     |--------------------------------------------------------------------------

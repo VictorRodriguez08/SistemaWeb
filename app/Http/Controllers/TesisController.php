@@ -13,6 +13,7 @@ use sistemaWeb\Log;
 use sistemaWeb\Http\Requests\TesisRequest;
 use sistemaWeb\Usuario_tesis;
 use sistemaWeb\User;
+use Gate;
 
 class TesisController extends Controller
 {
@@ -20,11 +21,27 @@ class TesisController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+
+
      */
+
+        public function __construct()
+    {
+        //$this->middleware('auth');
+        $this->operaciones_crud = config('app.operaciones_crud');
+        $this->operaciones_menu = config('app.operaciones_menu');
+        $this->menu_p = config('app.menu_p');
+        $this->menus_disponibles = config('app.menus_disponibles');
+
+    }
+
     public function index()
     {
-        $tesis = Tesis::obtener_todos();
-        return view('principal.tesis.index',['tesis'=>$tesis]);
+        if (Gate::allows('listar-tesis')) {
+            $tesis = Tesis::obtener_todos();
+            return view('principal.tesis.index',['tesis'=>$tesis]);
+        }
+        return redirect('home');
     }
 
     /**
@@ -34,10 +51,13 @@ class TesisController extends Controller
      */
     public function create()
     {
+        if (Gate::allows('crear-tesis')) {
         $estadostesis = new EstadosTesis();
 
         $estados = Estado::all();
         return view('principal.tesis.create',['estados'=>$estados, 'ESTADOS_TESIS'=>$estadostesis]);
+         }
+        return redirect('home');
     }
 
     /**
@@ -48,50 +68,53 @@ class TesisController extends Controller
      */
     public function store(TesisRequest $request)
     {
-        $error = "";
+        if (Gate::allows('crear-tesis')) {
+            $error = "";
 
-        try{
-            \DB::beginTransaction();
+            try{
+                \DB::beginTransaction();
 
-                $tesis = new Tesis();
-                $tesis->titulo = $request->input('titulo');
-                $tesis->estado_id = $request->input('estado_id');
-                $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
-                $tesis->fecha_fin = $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
-                $tesis->save();
+                    $tesis = new Tesis();
+                    $tesis->titulo = $request->input('titulo');
+                    $tesis->estado_id = $request->input('estado_id');
+                    $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
+                    $tesis->fecha_fin = $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
+                    $tesis->save();
 
-                Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis creada con id: '.$tesis->id);
-                foreach ($request->input('usuario_id') as $usuario_id) {
-                     $usuario = new Usuario_tesis();
-                    $usuario->user_id = explode('_',$usuario_id)[0];
-                    $usuario->rol = explode('_',$usuario_id)[1];
-                     $usuario->tesis_id = $tesis->id;
+                    Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis creada con id: '.$tesis->id);
+                    foreach ($request->input('usuario_id') as $usuario_id) {
+                         $usuario = new Usuario_tesis();
+                        $usuario->user_id = explode('_',$usuario_id)[0];
+                        $usuario->rol = explode('_',$usuario_id)[1];
+                         $usuario->tesis_id = $tesis->id;
 
-                     $usuario->save();
+                         $usuario->save();
 
-                    Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
-                 }
+                        Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
+                     }
 
 
-                foreach ($request->input('usuario_id') as $usuario_id) {
-                    $user_id = explode('_',$usuario_id)[0];
-                    $rol = explode('_',$usuario_id)[1];
-                    $user = User::find($user_id);
-                    $nombre_usuario = $user->name . " " . $user->apellidos;
+                    foreach ($request->input('usuario_id') as $usuario_id) {
+                        $user_id = explode('_',$usuario_id)[0];
+                        $rol = explode('_',$usuario_id)[1];
+                        $user = User::find($user_id);
+                        $nombre_usuario = $user->name . " " . $user->apellidos;
 
-                    $emailController = new MailController();
-                    $emailController->notificacion_agregado_investigacion($user_id,$tesis->titulo,$nombre_usuario,$rol);
+                        $emailController = new MailController();
+                        $emailController->notificacion_agregado_investigacion($user_id,$tesis->titulo,$nombre_usuario,$rol);
 
-                    Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
-                }
+                        Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
+                    }
 
-            \DB::commit();
-            return redirect('tesis/')->with('message', 'Tesis creada correctamente');
-        }catch(\Exception $e){
-            \DB::rollback();
+                \DB::commit();
+                return redirect('tesis/')->with('message', 'Tesis creada correctamente');
+            }catch(\Exception $e){
+                \DB::rollback();
+            }
+
+            return redirect('tesis/create');
         }
-
-        return redirect('tesis/create');
+        return redirect('home');
     }
 
     /**
@@ -102,8 +125,11 @@ class TesisController extends Controller
      */
     public function show($id)
     {
+         if (Gate::allows('listar-tesis')) {
         $tesis = Tesis::find($id);
         return view('principal.tesis.show',['tesis'=>$tesis]);
+        }
+        return redirect('home');
     }
 
     /**
@@ -114,16 +140,19 @@ class TesisController extends Controller
      */
     public function edit($id)
     {
-        $estados = Estado::all();
-        $tesis = Tesis::find($id);
-        $estadostesis = new EstadosTesis();
+        if (Gate::allows('actualizar-tesis')) {
+            $estados = Estado::all();
+            $tesis = Tesis::find($id);
+            $estadostesis = new EstadosTesis();
 
-        return view('principal.tesis.editar',
-            [
-                'estados'=>$estados,
-                'tesis'=>$tesis,
-                'ESTADOS_TESIS'=>$estadostesis
-            ]);
+            return view('principal.tesis.editar',
+                [
+                    'estados'=>$estados,
+                    'tesis'=>$tesis,
+                    'ESTADOS_TESIS'=>$estadostesis
+                ]);
+        }
+        return redirect('home');
     }
 
     /**
@@ -135,67 +164,70 @@ class TesisController extends Controller
      */
     public function update(TesisRequest $request, $id)
     {
-        $tesis = Tesis::find($id);
-        $tesis->titulo = $request->input('titulo');
-        $tesis->estado_id = $request->input('estado_id');
-        $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
-        $tesis->fecha_fin =  $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
+        if (Gate::allows('actualizar-tesis')) {
+            $tesis = Tesis::find($id);
+            $tesis->titulo = $request->input('titulo');
+            $tesis->estado_id = $request->input('estado_id');
+            $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
+            $tesis->fecha_fin =  $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
 
-        $lista_usuario_notificados = array();
+            $lista_usuario_notificados = array();
 
-        $excepcion = "";
-        try{
-            \DB::beginTransaction();
+            $excepcion = "";
+            try{
+                \DB::beginTransaction();
 
-            $tesis->save();
+                $tesis->save();
 
-            Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis actualizada con id: '.$tesis->id);
-            $lista_usuario_notificados = $tesis->usuario_tesis;
+                Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis actualizada con id: '.$tesis->id);
+                $lista_usuario_notificados = $tesis->usuario_tesis;
 
-            Usuario_tesis::eliminar_por_tesis($id);
+                Usuario_tesis::eliminar_por_tesis($id);
 
-            foreach ($request->input('usuario_id') as $usuario_id) {
-                $usuario = new Usuario_tesis();
-                $usuario->user_id = explode('_',$usuario_id)[0];
-                $usuario->rol = explode('_',$usuario_id)[1];
-                $usuario->tesis_id = $tesis->id;
+                foreach ($request->input('usuario_id') as $usuario_id) {
+                    $usuario = new Usuario_tesis();
+                    $usuario->user_id = explode('_',$usuario_id)[0];
+                    $usuario->rol = explode('_',$usuario_id)[1];
+                    $usuario->tesis_id = $tesis->id;
 
-                $usuario->save();
+                    $usuario->save();
+
+                    Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
+                }
+
+                foreach ($request->input('usuario_id') as $usuario_id) {
+                    $user_id = explode('_',$usuario_id)[0];
+                    if(!$this->usuario_notificacion_enviada($lista_usuario_notificados, $user_id)){
+                        $rol = explode('_',$usuario_id)[1];
+                        $user = User::find($user_id);
+                        $nombre_usuario = $user->name . " " . $user->apellidos;
+
+                        $emailController = new MailController();
+                        $emailController->notificacion_agregado_investigacion($user_id,$tesis->titulo,$nombre_usuario,$rol);
+                    }
+                }
 
                 Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
+
+                \DB::commit();
+
+                return redirect('tesis/')->with('message', 'Tesis actualizada correctamente');
+            }catch(\Exception $e){
+                \DB::rollback();
+                $excepcion = $e->getMessage();
+                echo $excepcion;
+                return;
             }
 
-            foreach ($request->input('usuario_id') as $usuario_id) {
-                $user_id = explode('_',$usuario_id)[0];
-                if(!$this->usuario_notificacion_enviada($lista_usuario_notificados, $user_id)){
-                    $rol = explode('_',$usuario_id)[1];
-                    $user = User::find($user_id);
-                    $nombre_usuario = $user->name . " " . $user->apellidos;
-
-                    $emailController = new MailController();
-                    $emailController->notificacion_agregado_investigacion($user_id,$tesis->titulo,$nombre_usuario,$rol);
-                }
-            }
-
-            Log::agregar_log('tabla usuarioTesis',Auth()->user()->id, 'UsuarioTesis creado con id: '.$usuario->id);
-
-            \DB::commit();
-
-            return redirect('tesis/')->with('message', 'Tesis actualizada correctamente');
-        }catch(\Exception $e){
-            \DB::rollback();
-            $excepcion = $e->getMessage();
-            echo $excepcion;
-            return;
+            $estados = Estado::all();
+            return view('principal.tesis.editar',[
+                'estados'=>$estados,
+                'tesis'=>$tesis,
+                'ESTADOS_TESIS'=>new EstadosTesis(),
+                'excepcion'=>$excepcion
+            ]);
         }
-
-        $estados = Estado::all();
-        return view('principal.tesis.editar',[
-            'estados'=>$estados,
-            'tesis'=>$tesis,
-            'ESTADOS_TESIS'=>new EstadosTesis(),
-            'excepcion'=>$excepcion
-        ]);
+        return redirect('home');
     }
 
     private function usuario_notificacion_enviada($lista, $id_usuario){
@@ -215,18 +247,21 @@ class TesisController extends Controller
      */
     public function destroy($id)
     {
-        try{
-            \DB::beginTransaction();
-                Usuario_tesis::eliminar_por_tesis($id);
-                \DB::table('tesis')->where('id', '=' , $id)->delete();
+        if (Gate::allows('eliminar-tesis')) {
+            try{
+                \DB::beginTransaction();
+                    Usuario_tesis::eliminar_por_tesis($id);
+                    \DB::table('tesis')->where('id', '=' , $id)->delete();
 
-                Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis eliminado con id: '.$id);
-            \DB::commit();
-            return redirect('tesis/')->with('message', 'Tesis eliminada correctamente');
-        }catch(\Exception $e){
-            \DB::rollback();
+                    Log::agregar_log('tabla Tesis',Auth()->user()->id, 'Tesis eliminado con id: '.$id);
+                \DB::commit();
+                return redirect('tesis/')->with('message', 'Tesis eliminada correctamente');
+            }catch(\Exception $e){
+                \DB::rollback();
+            }
+            return Redirect::to('tesis');
         }
-        return Redirect::to('tesis');
+        return redirect('home');
     }
 
     public function GetUsuariosTesis($id){

@@ -40,15 +40,18 @@ class UsuarioController extends Controller
                 ->paginate(7);
                 return view('administracion.usuario.index',["usuarios"=>$usuarios,"searchText"=>$query]);
             } 
-            }
+        }
             return redirect('home');
          	
     }
 
     public function show($id)
     {
+        if (Gate::allows('listar-seguridad')) {
         $usuarios=User::find($id);
         return view('administracion.usuario.show',["usuarios"=>$usuarios]);
+        }
+            return redirect('home');
     }
 
 
@@ -59,46 +62,60 @@ class UsuarioController extends Controller
 
     public function create()
     {
-    	return view("administracion.usuario.create");
+        if (Gate::allows('crear-seguridad')) {
+            # code...
+            return view("administracion.usuario.create");
+        }
+        return redirect('home');
+    	
     }
 
     public function store(UsuarioFormRequest $request)
     {
-    	$usuario=new User;
-    	$usuario->name=$request->get('name');
-    	$usuario->apellidos=$request->get('apellidos');
-    	$usuario->email=$request->get('email');
-    	$usuario->password=bcrypt($request->get('password'));
-    	$usuario->direccion=$request->get('direccion');
-    	$usuario->titulo=$request->get('titulo');
-    	$usuario->otros_estudios=$request->get('otros_estudios');
-    	$usuario->fecha_nac=$request->get('fecha_nac');
-    	$usuario->dui=$request->get('dui');
-    	$usuario->telefonos=$request->get('telefonos');
-    	$usuario->otros_email=$request->get('otros_email');
-    	$usuario->save();
+        if (Gate::allows('crear-seguridad')) {
+            $usuario=new User;
+            $usuario->name=$request->get('name');
+            $usuario->apellidos=$request->get('apellidos');
+            $usuario->email=$request->get('email');
+            $usuario->password=bcrypt($request->get('password'));
+            $usuario->direccion=$request->get('direccion');
+            $usuario->titulo=$request->get('titulo');
+            $usuario->otros_estudios=$request->get('otros_estudios');
+            $usuario->fecha_nac=$request->get('fecha_nac');
+            $usuario->dui=$request->get('dui');
+            $usuario->telefonos=$request->get('telefonos');
+            $usuario->otros_email=$request->get('otros_email');
+            $usuario->save();
 
-    	//Enviar notificacion al administrador
-        $emailController = new MailController();
-        $emailController->notificacion_usuario_nuevo($usuario->id);
+            //Enviar notificacion al administrador
+            $emailController = new MailController();
+            $emailController->notificacion_usuario_nuevo($usuario->id);
 
-        Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario creado con id: '.$usuario->id);
+            Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario creado con id: '.$usuario->id);
 
-    	return Redirect::to('administracion/usuario');
+            return Redirect::to('administracion/usuario');
+                
+        }
+        return redirect('home');
+
     }
 
     public function edit($id)
     {
-        $rol = Role::all();
+        if (Gate::allows('actualizar-seguridad')) {
+            $rol = Role::all();
 
-    	return view("administracion.usuario.edit",[
-    	    "usuario"=>User::findOrFail($id),
-            "roles"=>$rol
-        ]);
+        	return view("administracion.usuario.edit",[
+        	    "usuario"=>User::findOrFail($id),
+                "roles"=>$rol
+            ]);
+        }
+        return redirect('home');
     }
 
     public function update(UsuarioFormRequest $request ,$id)
     {
+        if (Gate::allows('actualizar-seguridad')) {
         $usuario=User::findOrFail($id);
         $estado_anterior = $usuario->estado;
         $excepcion = "";
@@ -151,22 +168,26 @@ class UsuarioController extends Controller
             "roles"=>$rol,
             'excepcion'=>$excepcion
         ]);
+        }
+        return redirect('home');
 
     }
 
     public function destroy($id)
     {
-        
-        try {
-            \DB::beginTransaction();
-            $usuario = DB::table('users')->where('id', '=' , $id)->delete();
-            Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario eliminado con id: '.$id);            
-            \DB::commit();
+        if (Gate::allows('eliminar-seguridad')) {
+            try {
+                \DB::beginTransaction();
+                $usuario = DB::table('users')->where('id', '=' , $id)->delete();
+                Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario eliminado con id: '.$id);            
+                \DB::commit();
 
-        } catch (Exception $e) {
-            \DB::rollback();
+            } catch (Exception $e) {
+                \DB::rollback();
+            }
+            return Redirect::to('administracion/usuario');
         }
-        return Redirect::to('administracion/usuario');
+        return redirect('home');
     	
 
     }

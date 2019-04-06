@@ -24,7 +24,7 @@ class AutoresCongresoFormRequest extends Request
     public function rules()
     {
         return [
-            "user_id"=>"required",
+            "user_id_1"=>"required",
             "congreso_id"=>"required",
             "carrera"=>"required",
             "tema"=>"required",
