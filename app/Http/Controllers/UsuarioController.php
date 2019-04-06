@@ -5,32 +5,44 @@ namespace sistemaWeb\Http\Controllers;
 use Illuminate\Http\Request;
 
 use sistemaWeb\Http\Requests;
-use sistemaWeb\Rol;
+use sistemaWeb\Role;
 use sistemaWeb\RoleUser;
 use sistemaWeb\User;
 use sistemaWeb\Log;
 use Illuminate\Support\Facades\Redirect;
 use sistemaWeb\Http\Requests\UsuarioFormRequest;
 use DB;
+use Gate;
 
 class UsuarioController extends Controller
 {
+    private $operaciones_crud;
+    private $menus_disponibles;
+
     public function __construct()
     {
     	//$this->middleware('auth');
+        $this->operaciones_crud = config('app.operaciones_crud');
+        $this->operaciones_menu = config('app.operaciones_menu');
+        $this->menu_p = config('app.menu_p');
+        $this->menus_disponibles = config('app.menus_disponibles');
 
     }
 
     public function index(Request $request)
     {
-         if ($request)
-        {
-            $query=trim($request->get('searchText'));
-            $usuarios=DB::table('users')->where('name','LIKE','%'.$query.'%')
-            ->orderBy('id','desc')
-            ->paginate(5);
-            return view('administracion.usuario.index',["usuarios"=>$usuarios,"searchText"=>$query]);
-        } 	
+        if (Gate::allows('listar-seguridad')) {
+           if ($request)
+            {
+                $query=trim($request->get('searchText'));
+                $usuarios=DB::table('users')->where('name','LIKE','%'.$query.'%')
+                ->orderBy('id','desc')
+                ->paginate(7);
+                return view('administracion.usuario.index',["usuarios"=>$usuarios,"searchText"=>$query]);
+            } 
+            }
+            return redirect('home');
+         	
     }
 
     public function show($id)
@@ -70,14 +82,14 @@ class UsuarioController extends Controller
         $emailController = new MailController();
         $emailController->notificacion_usuario_nuevo($usuario->id);
 
-        Log::agregar_log('tabla Usuario',$usuario->id, 'Usuario creado con id: '.$usuario->id);
+        Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario creado con id: '.$usuario->id);
 
     	return Redirect::to('administracion/usuario');
     }
 
     public function edit($id)
     {
-        $rol = Rol::all();
+        $rol = Role::all();
 
     	return view("administracion.usuario.edit",[
     	    "usuario"=>User::findOrFail($id),
@@ -132,7 +144,7 @@ class UsuarioController extends Controller
             $excepcion = $e->getMessage();
         }
 
-        $rol = Rol::all();
+        $rol = Role::all();
 
         return view("administracion.usuario.edit", [
             "usuario" => $usuario,
@@ -144,10 +156,18 @@ class UsuarioController extends Controller
 
     public function destroy($id)
     {
-    	$usuario = DB::table('users')->where('id', '=' , $id)->delete();
+        
+        try {
+            \DB::beginTransaction();
+            $usuario = DB::table('users')->where('id', '=' , $id)->delete();
+            Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario eliminado con id: '.$id);            
+            \DB::commit();
 
-    	Log::agregar_log('tabla Usuario',Auth()->user()->id, 'Usuario eliminado con id: ' .$usuario->id);
-    	return Redirect::to('administracion/usuario');
+        } catch (Exception $e) {
+            \DB::rollback();
+        }
+        return Redirect::to('administracion/usuario');
+    	
 
     }
 

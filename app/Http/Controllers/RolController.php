@@ -13,11 +13,16 @@ class RolController extends Controller
 {
     private $operaciones_crud;
     private $menus_disponibles;
+    private $menu_p;
+    private $operaciones_menu;
 
     public function __construct()
     {
         $this->operaciones_crud = config('app.operaciones_crud');
+        $this->operaciones_menu = config('app.operaciones_menu');
+        $this->menu_p = config('app.menu_p');
         $this->menus_disponibles = config('app.menus_disponibles');
+
     }
 
     public function index(Request $request)
@@ -25,6 +30,7 @@ class RolController extends Controller
         if (Gate::allows('listar-seguridad')) {
             if ($request) {
                 $roles = Role::all();
+                
 
                 return view('administracion.rol.index', ['selected'=>'seguridad'])
                     ->with('roles', $roles);
@@ -44,6 +50,8 @@ class RolController extends Controller
             $rol = new Role();
             return view('administracion.rol.create',['selected'=>'seguridad',
                 'operaciones_crud'=>$this->operaciones_crud,
+                'operaciones_menu'=>$this->operaciones_menu,
+                'menu_p'=>$this->menu_p,
                 'menus_disponibles'=>$this->menus_disponibles])
                 ->with('rol', $rol);
         }
@@ -88,6 +96,8 @@ class RolController extends Controller
             $rol = new Role();
             return view('administracion.rol.create',['selected'=>'seguridad',
                 'operaciones_crud'=>$this->operaciones_crud,
+                'operaciones_menu'=>$this->operaciones_menu,
+                'menu_p'=>$this->menu_p,
                 'menus_disponibles'=>$this->menus_disponibles])
                 ->with('rol', $rol);
         }
@@ -104,7 +114,11 @@ class RolController extends Controller
     {
         if (Gate::allows('actualizar-seguridad')) {
             $rol = Role::find($id);
-            return view('administracion.rol.edita',['selected'=>'seguridad','operaciones_crud'=>$this->operaciones_crud,'menus_disponibles'=>$this->menus_disponibles])
+            return view('administracion.rol.edita',['selected'=>'seguridad',
+                'operaciones_crud'=>$this->operaciones_crud,
+                'operaciones_menu'=>$this->operaciones_menu,
+                'menu_p'=>$this->menu_p,
+                'menus_disponibles'=>$this->menus_disponibles])
                 ->with('rol', $rol);
         }
         return redirect('home');
@@ -143,7 +157,11 @@ class RolController extends Controller
             }catch(\Exception $e){
                 \DB::rollback();
             }
-            return view('administracion.rol.edit',['selected'=>'seguridad','operaciones_crud'=>$this->operaciones_crud,'menus_disponibles'=>$this->menus_disponibles])
+            return view('administracion.rol.edit',['selected'=>'seguridad',
+                'operaciones_crud'=>$this->operaciones_crud,
+                'operaciones_menu'=>$this->operaciones_menu,
+                'menu_p'=>$this->menu_p,
+                'menus_disponibles'=>$this->menus_disponibles])
                 ->with('rol', $rol);
         }
         return redirect('home');

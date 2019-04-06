@@ -13,6 +13,7 @@ class InicioController extends Controller
 {
     public function __contruct()
     {
+        $this->middleware('auth');
     }
 
     public function index()

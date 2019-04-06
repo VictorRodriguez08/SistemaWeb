@@ -22,7 +22,7 @@
 			<div class="row">
 				@can('crear-seguridad', auth()->user())
 					<div class="col-sm-12">
-						<h3>Listado de Tesis <a href="administracion/rol/create"> <button class="btn btn-success">Nuevo</button></a></h3>
+						<h3>Listado de Tesis <a href="rol/create"> <button class="btn btn-success">Nuevo</button></a></h3>
 					</div>
 				@endcan
 				<div class="col-sm-12 table-responsive">

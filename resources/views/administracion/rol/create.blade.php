@@ -43,6 +43,29 @@
 				</div>
 			</div>
 		@endforeach
+
+		@foreach($menu_p as $menu)
+			<div class="col-sm-12 col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<h6>{{$menu}}</h6>
+						@foreach($operaciones_menu as $operacion)
+							@php
+								$seleccionado = strpos($rol->permisos,strtolower($operacion) . '-' . strtolower($menu));
+							@endphp
+							<div class="form-check form-check-inline">
+								<label class="form-check-label">
+									<input class="form-check-input" type="checkbox" name="{{strtolower($menu . '[]')}}" value="{{strtolower($operacion)}}" {{$seleccionado?"checked":""}}> {{$operacion}}
+									<span class="form-check-sign">
+                                        <span class="check"></span>
+                                    </span>
+								</label>
+							</div>
+						@endforeach
+					</div>
+				</div>
+			</div>
+		@endforeach
 	</div>
 
 	<div class="row">

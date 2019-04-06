@@ -49,7 +49,7 @@ class User extends Authenticatable
     public static function obtener_administradores(){
         $usuarios = self::all();
         $administradores     = array();
-        $rol_administrador = Rol::where('name','=','Administrador')->first();
+        $rol_administrador = Role::where('name','=','Administrador')->first();
         foreach ($usuarios as $item) {
             foreach ($item->rol_usuario()->get() as $usuario_rol){
                 if($usuario_rol->role_id == $rol_administrador->id){
