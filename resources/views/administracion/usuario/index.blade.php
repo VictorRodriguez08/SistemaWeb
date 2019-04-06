@@ -1,3 +1,14 @@
+@php
+	$puede_editar = false;
+    $puede_eliminar = false;
+    if (Gate::allows('actualizar-seguridad')) {
+        $puede_editar = true;
+    }
+    if (Gate::allows('eliminar-seguridad')) {
+        $puede_eliminar = true;
+    }
+@endphp
+
 @extends ('layouts.admin')
 @section ('contenido')
 <div class="row">
@@ -42,10 +53,14 @@
 							</a>
 						</td>
 						<td>
+							@if($puede_editar)
 							<a href="{{URL::action('UsuarioController@edit',$u->id)}}"><button class="btn btn-warning">Editar</button></a>
+							@endif
 						</td>
 						<td>
+							@if($puede_eliminar)
 							<a href="" data-target="#modal-delete-{{$u->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>
+							@endif
 						</td>
 					</tr>
 					@include('administracion.usuario.modal')

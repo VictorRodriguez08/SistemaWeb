@@ -8,7 +8,8 @@ use sistemaWeb\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
-
+use Illuminate\Http\Request;
+use Auth;
 
 
 class AuthController extends Controller
@@ -92,5 +93,7 @@ class AuthController extends Controller
         return redirect('login');
 
     }
+
+
   
 }

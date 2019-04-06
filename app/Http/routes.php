@@ -31,6 +31,7 @@ Route::get('/log','LogController@index')->name('logs');
 Route::get('descargar/{searchText}','LogController@pdf');
 Route::resource('inicio','InicioController');
 Route::resource('congreso','CongresoController');
+Route::resource('autores_congreso','AutoresCongresoController');
 
 
 

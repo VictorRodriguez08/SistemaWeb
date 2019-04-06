@@ -166,7 +166,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{url('administracion/usuario')}}"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-                <li><a href=""><i class="fa fa-circle-o"></i> Asignar Roles</a></li>
+                <li><a href="{{url('administracion/rol')}}"><i class="fa fa-circle-o"></i> Roles</a></li>
               </ul>
             </li>
             
@@ -178,7 +178,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="{{url('congreso')}}"><i class="fa fa-circle-o"></i> Registrar</a></li>
-                <li><a href=""><i class="fa fa-circle-o"></i> Administrar Congreso</a></li>
+                <li><a href="{{url('autores_congreso')}}"><i class="fa fa-circle-o"></i> Asginar Autores</a></li>
               </ul>
             </li>
             <li class="treeview">
