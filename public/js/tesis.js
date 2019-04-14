@@ -52,15 +52,42 @@ $(document).ready(function(){
 
 	$('#btnBuscarUsuario').click(function(e){
 		e.preventDefault();
+		$("#divOpciones").addClass('hide');
+
+		$('#modalTablaUsuarios').html('');
+
+		$('#tituloBusqueda').html("Seleccione un Alumno");
+
+		$('#txtModal').val('');
+
+		$('#tipoBusqueda').val(0);
+
+		$('#modalBusqueda').modal('show');
+	});
+	$('#btnBuscarJurado').click(function(e){
+		e.preventDefault();
+		$("#divOpciones").removeClass('hide');
+
+		$('#modalTablaUsuarios').html('');
+
+		$('#tituloBusqueda').html("Seleccione un Asesor o Jurado");
+
+		$('#txtModal').val('');
+
+		$('#tipoBusqueda').val(1);
+
 		$('#modalBusqueda').modal('show');
 	});
 
 	$('#btnBuscarModal').click(function(){
 		$('#modalTablaUsuarios').html('');
 		var criterio = $('#txtModal').val() !== "" ? $('#txtModal').val() : "all";
-		$.get($('#urlBuscarUsuario').val() + "/" + criterio,function(result){
+		var opcionBusqueda = $('input[name="opcionBusqueda"]:checked').val() !== undefined ? $('input[name="opcionBusqueda"]:checked').val() : "";
+		var tipoBusqueda = $('#tipoBusqueda').val();
+
+		$.get($('#urlBuscarUsuario').val() + "/" + tipoBusqueda + "/" + criterio + "/" + opcionBusqueda,function(result){
 			var datos = "";
-			$.each(result, function(indice, valor){
+			$.each(result.data, function(indice, valor){
 				datos += "<tr onclick='seleccionar_usuario(this)'>";
 					datos += "<td class='hidden'>";
 						datos += valor.id;

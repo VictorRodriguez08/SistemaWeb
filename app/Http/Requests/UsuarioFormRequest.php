@@ -43,7 +43,7 @@ class UsuarioFormRequest extends Request
             'password'=>$password,
             'direccion'=>'required|max:200',
             'titulo'=>'required|max:100',
-            'otros_estudios'=>'max:100',
+            'otros_estudios'=>'max:500',
             'fecha_nac'=>'required',
             'dui'=>'required|max:10',
             'telefonos'=>'required|max:100',

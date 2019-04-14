@@ -1,7 +1,7 @@
 @extends ('layouts.admin')
 @section ('contenido')
 		<div class="row">
-			<div class="col-lg-6 col-md-6 col-sm6 col-xs-12 ">
+			<div class="col-xs-12">
 				<h3> Nuevo Usuario</h3>
 				@if(count($errors)>0)
 				<div class="alert alert-danger">
@@ -26,7 +26,7 @@
 
 						<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
 
-                            <label for="name" class="col-md-6 control-label">Nombre  <label>*</label></label>
+                            <label for="name" class="col-md-3 control-label">Nombre  <label>*</label></label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Nombre">
@@ -162,24 +162,24 @@
                         </div>
 
                         <div class="row">
-                        <div class="form-group{{ $errors->has('otros_estudios') ? ' has-error' : '' }}">
-                            <label for="otros_estudios" class="col-md-6 control-label">Otros Estudios</label>
+                            <div class="form-group{{ $errors->has('otros_estudios') ? ' has-error' : '' }}">
+                                <label for="otros_estudios" class="col-md-6 control-label">Otros Estudios</label>
 
-                            <div class="col-md-6">
-                                <input id="otros_estudios" type="text" class="form-control" name="otros_estudios" value="{{ old('otros_estudios') }}" placeholder="Otros estudios">
+                                <div class="col-md-6">
+                                    <input data-role="tagsinput" id="otros_estudios" type="text" class="form-control" name="otros_estudios" value="{{ old('otros_estudios') }}" placeholder="Otros estudios" />
 
-                                @if ($errors->has('otros_estudios'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('otros_estudios') }}</strong>
-                                    </span>
-                                @endif
+                                    @if ($errors->has('otros_estudios'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('otros_estudios') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                <br>
+                                <br>
+
                             </div>
-                            <br>
-                            <br>
-                            
                         </div>
-                        </div>
-
+                <br>
                         <div class="row">
                         <div class="form-group{{ $errors->has('fecha_nac') ? ' has-error' : '' }}">
                             <label for="fecha_nac" class="col-md-6 control-label">Fecha de Nacimiento  <label>*</label></label>

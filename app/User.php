@@ -60,11 +60,68 @@ class User extends Authenticatable
         return $administradores;
     }
 
-    public static function buscar($criterio=""){
+    public static function buscar($criterio="", $opcion="", $tipo=""){
     	if($criterio!='all'){
-	    	return User::whereRaw(DB::raw("concat(name, ' ', apellidos) like '%" . $criterio . "%'"))->get();
+            if($opcion != null && $opcion != "nombre") {
+                if ($opcion == "titulo") {
+                    return DB::table('users')
+                        ->select('id','name','apellidos')
+                        ->where(function($query) use ($criterio) {
+                            $query->whereRaw("concat(name, ' ', apellidos) like '%" . $criterio . "%'")
+                                ->orWhere('titulo', "like", '%' . $criterio . '%');
+                        })
+                        ->where('tipo_usuario','=',$tipo)
+                        ->where('estado','=',1)
+
+                        ->orderBy('id', 'desc')
+                        ->paginate(7);
+                }
+
+                return DB::table('users')
+                    ->select('id','name','apellidos')
+                    ->where(function($query) use ($criterio) {
+                        $query->whereRaw("concat(name, ' ', apellidos) like '%" . $criterio . "%'")
+                            ->orWhere('otros_estudios', "like", '%' . $criterio . '%');
+                    })
+                    ->where('tipo_usuario','=',$tipo)
+                    ->where('estado','=',1)
+                    ->orderBy('id', 'desc')
+                    ->paginate(7);
+            }
+
+            return DB::table('users')
+                ->select('id','name','apellidos')
+                ->whereRaw("concat(name, ' ', apellidos) like '%" . $criterio . "%'")
+                ->where('tipo_usuario','=',$tipo)
+                ->where('estado','=',1)
+                ->orderBy('id','desc')
+                ->paginate(7);
     	}else{
-    		return User::all();
+            if($opcion != null && $opcion != "nombre") {
+                if ($opcion == "titulo") {
+                    return DB::table('users')
+                        ->select('id','name','apellidos')
+                        ->where('titulo', "like", '%' . $criterio . '%')
+                        ->where('tipo_usuario','=',$tipo)
+                        ->where('estado','=',1)
+                        ->orderBy('id', 'desc')
+                        ->paginate(7);
+                }
+
+                return DB::table('users')
+                    ->select('id','name','apellidos')
+                    ->Where('otros_estudios', "like", '%' . $criterio . '%')
+                    ->where('tipo_usuario','=',$tipo)
+                    ->where('estado','=',1)
+                    ->orderBy('id', 'desc')
+                    ->paginate(7);
+            }
+
+
+    		return DB::table('users')->select('id','name','apellidos')
+                ->where('tipo_usuario','=',$tipo)
+                ->where('estado','=',1)
+                ->paginate(7);
     	}
     }
 

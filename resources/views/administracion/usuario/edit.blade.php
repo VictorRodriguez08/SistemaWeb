@@ -1,7 +1,7 @@
 @extends ('layouts.admin')
 @section ('contenido')
 	<div class="row">
-		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		<div class="col-xs-12">
 			<h3>Editar Usuario: {{ $usuario->name}}</h3>
 			@if (count($errors)>0 || isset($excepcion))
                 <div class="alert alert-danger">
@@ -150,10 +150,10 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('otros_estudios') ? ' has-error' : '' }}">
-                            <label for="otros_estudios" class="col-md-4 control-label">Otros Estudios</label>
+                            <label for="otros_estudios" class="col-md-4 control-label">Otros Estudios (Llenar este campo si no es alumno)</label>
 
                             <div class="col-md-6">
-                                <input id="otros_estudios" type="text" class="form-control" name="otros_estudios" value="{{$usuario->otros_estudios}}">
+                                <input data-role="tagsinput" id="otros_estudios" type="text" class="form-control" name="otros_estudios" value="{{$usuario->otros_estudios}}">
 
                                 @if ($errors->has('otros_estudios'))
                                     <span class="help-block">
@@ -243,6 +243,19 @@
                                 @foreach($roles as $rol)
                                     <option value="{{$rol->id}}" {{ $rol->id == $usuario->primer_rol()->role_id ? "selected":"" }}>{{$rol->name}}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <br><br><br>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label for="select_tipo">Tipo de Usuario</label>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="select_tipo" name="tipo_usuario" class="form-control" required>
+                                <option value="">--Seleccione un Rol--</option>
+                                <option value="0" {{$usuario->tipo_usuario == 0 ? "selected": "" }}>Alumno</option>
+                                <option value="1" {{$usuario->tipo_usuario == 1 ? "selected": "" }}>Jurado o Asesor</option>
                             </select>
                         </div>
                     </div>

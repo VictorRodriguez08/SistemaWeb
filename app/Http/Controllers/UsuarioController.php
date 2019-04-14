@@ -35,9 +35,11 @@ class UsuarioController extends Controller
            if ($request)
             {
                 $query=trim($request->get('searchText'));
-                $usuarios=DB::table('users')->where('name','LIKE','%'.$query.'%')
-                ->orderBy('id','desc')
-                ->paginate(7);
+
+                $usuarios= DB::table('users')
+                    ->where('name','LIKE','%'.$query.'%')
+                    ->orderBy('id','desc')
+                    ->paginate(7);
                 return view('administracion.usuario.index',["usuarios"=>$usuarios,"searchText"=>$query]);
             } 
         }
@@ -56,17 +58,17 @@ class UsuarioController extends Controller
 
 
 
-    public function buscar($criterio=""){
-        return User::buscar($criterio);
+    public function buscar($tipo, $criterio="", $opcionBusqueda=""){
+        return User::buscar($criterio,$opcionBusqueda, $tipo);
     }
 
     public function create()
     {
-        if (Gate::allows('crear-seguridad')) {
+        //if (Gate::allows('crear-seguridad')) {
             # code...
             return view("administracion.usuario.create");
-        }
-        return redirect('home');
+        //}
+        //return redirect('home');
     	
     }
 
@@ -136,6 +138,7 @@ class UsuarioController extends Controller
             $usuario->telefonos = $request->get('telefonos');
             $usuario->otros_email = $request->get('otros_email');
             $usuario->estado = $request->get('estado_id');
+            $usuario->tipo_usuario = $request->get('tipo_usuario');
 
             $usuario->update();
 

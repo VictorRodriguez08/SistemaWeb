@@ -107,11 +107,14 @@
 
                 </div>
             </div>
-            <div class="col-sm-12 col-md-10">
+            <div class="col-sm-12">
                 <h4>Ingrese los usuarios que pertenecen a la Tesis</h4>
             </div>
-            <div class="col-sm-12 col-md-2">
-                <a href="#" id="btnBuscarUsuario" class="btn btn-primary">Agregar</a>
+            <div class="col-sm-12 col-md-4">
+                <a href="#" id="btnBuscarUsuario" class="btn btn-primary">Agregar Alumnos</a>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <a href="#" id="btnBuscarJurado" class="btn btn-primary">Agregar Asesor y Jurado</a>
             </div>
 
 

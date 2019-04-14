@@ -25,6 +25,8 @@
 
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/dropzone.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('css/bootstrap-tagsinput.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('css/estilo.css')}}" rel="stylesheet" type="text/css" />
 
   </head>
   <body class="hold-transition skin-green sidebar-mini">
@@ -276,6 +278,7 @@
      <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
      <script src="https://unpkg.com/gijgo@1.9.11/js/messages/messages.es-es.js" type="text/javascript"></script>
      <script src="{{asset('js/dropzone.js')}}" type="text/javascript"></script>
+     <script src="{{asset('js/bootstrap-tagsinput.min.js')}}" type="text/javascript"></script>
 
     @yield('scripts')
     <script>
