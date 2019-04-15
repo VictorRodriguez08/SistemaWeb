@@ -131,13 +131,14 @@
                         <th>Jurado</th>
                         <th>Asesor</th>
                         <th>Alumno</th>
+                        <th>Cargo</th>
                     </tr>
                     </thead>
                     <tbody id="tbodyUsuariosTesis">
                     @foreach($tesis->usuario_tesis as $u)
                         <tr>
                             <td>
-                                <a href='#' class='btn btn-danger' onclick='eliminar_usuario("{{$u->user->id}}","{{$u->rol}}", this, event)'>Eliminar</a>
+                                <a href='#' class='btn btn-danger' onclick='eliminar_usuario("{{$u->user->id}}","{{$u->rol}}","{{$u->cargo}}" ,this, event)'>Eliminar</a>
                             </td>
                             <td class="hidden">{{$u->user->id}}</td>
                             <td>{{$u->user->name}}</td>
@@ -162,6 +163,17 @@
                                         <input type="radio" name="optionsRadios{{$correlativo}}" value="3" {{$u->rol == 1 ? "checked" : ""}} disabled>
                                     </label>
                                 </div>
+                            </td>
+                            <td>
+                                @if($u->rol == 3)
+                                    @if($u->cargo == 0)
+                                        Presidente
+                                    @elseif($u->cargo == 1)
+                                        Primer Vocal
+                                    @elseif($u->cargo == 2)
+                                        Segundo Vocal
+                                    @endif
+                                @endif
                             </td>
                         </tr>
                     @endforeach

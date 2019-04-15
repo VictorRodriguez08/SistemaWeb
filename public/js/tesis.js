@@ -12,6 +12,10 @@ var ANTEPROYECTO;
 var TESIS;
 var SelectEstados;
 
+var primero_vocal = 0;
+var segundo_vocal = 0;
+var presidente = 0;
+
 $(document).ready(function(){
 	PERFIL = $('#PERFIL').val();
 	ANTEPROYECTO = $('#ANTEPROYECTO').val();
@@ -74,7 +78,25 @@ $(document).ready(function(){
 
 		$('#txtModal').val('');
 
-		$('#tipoBusqueda').val(1);
+		$('#tipoBusqueda').val(1)
+
+		if(presidente > 0){
+			$('#select_cargo').find('option[value="0"]').attr('disabled','disabled');
+		}
+
+		if(primero_vocal > 0){
+			$('#select_cargo').find('option[value="1"]').attr('disabled','disabled');
+		}
+
+		if(segundo_vocal > 0){
+			$('#select_cargo').find('option[value="2"]').attr('disabled','disabled');
+		}
+
+		if(!verificar_disponibilidad(ASESOR) && verificar_disponibilidad(JURADO)){
+			$('#divCargo').removeClass('hide');
+		}else{
+			$('#divCargo').addClass('hide');
+		}
 
 		$('#modalBusqueda').modal('show');
 	});
@@ -140,6 +162,14 @@ function seleccionar_usuario(element){
 				tipo_agregado = 3;
 				$('#estado_id').find('option[value="' + PERFIL + '"]').attr('disabled','disabled');
 				$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
+
+				if(parseInt($('#select_cargo').val()) === 0){
+					presidente++;
+				}else if(parseInt($('#select_cargo').val()) === 1){
+					primero_vocal++;
+				}else if(parseInt($('#select_cargo').val()) === 2){
+					segundo_vocal++;
+				}
 			}
 
 		}
@@ -147,26 +177,30 @@ function seleccionar_usuario(element){
 		if(check_alumno || check_asesor || check_jurado){
 			var datos = "";
 			var name_radio = "optionsRadios" + correlativo++;
+
 			datos += "<tr>";
-			datos += "<td>";
-			datos += "<a href='#' class='btn btn-danger' onclick='eliminar_usuario(" + $(fila.children('td')[0]).text() + "," +tipo_agregado+ ", this, event)'>Eliminar</a>";
-			datos += "</td>";
-			datos += "<td class='hidden'>";
-			datos += $(fila.children('td')[0]).text();
-			datos += "</td>";
-			datos += "<td>";
-			datos += $(fila.children('td')[1]).text();
-			datos += "</td>";
-			datos += "<td>";
-			datos += $(fila.children('td')[2]).text();
-			datos += "</td>";
-			datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='1' " + (check_jurado ? "checked" : "" ) + " disabled></label></div></td>";
-			datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='2' " + (check_asesor ? "checked" : "" ) +" disabled></label></div></td>";
-			datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='3' " + (check_alumno ? "checked" : "" ) + " disabled></label></div></td>";
+				datos += "<td>";
+					datos += "<a href='#' class='btn btn-danger' onclick='eliminar_usuario(" + $(fila.children('td')[0]).text() + "," +tipo_agregado +"," + $('#select_cargo').val()  + ", this, event)'>Eliminar</a>";
+				datos += "</td>";
+				datos += "<td class='hidden'>";
+					datos += $(fila.children('td')[0]).text();
+				datos += "</td>";
+				datos += "<td>";
+					datos += $(fila.children('td')[1]).text();
+				datos += "</td>";
+				datos += "<td>";
+					datos += $(fila.children('td')[2]).text();
+				datos += "</td>";
+				datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='1' " + (check_jurado ? "checked" : "" ) + " disabled></label></div></td>";
+				datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='2' " + (check_asesor ? "checked" : "" ) +" disabled></label></div></td>";
+				datos += "<td><div class=\"radio\"><label><input type=\"radio\" name="+ name_radio +" id=\"optionsRadios1\" value='3' " + (check_alumno ? "checked" : "" ) + " disabled></label></div></td>";
+				datos += "<td>";
+					datos += (check_jurado ? $('#select_cargo').find('option:selected').text()  : "");
+				datos += "</td>";
 			datos += "</tr>";
 			$('#tbodyUsuariosTesis').append(datos);
 
-			var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + "_" + tipo_agregado +'">';
+			var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + "_" + tipo_agregado + (check_jurado ? "_" + $('#select_cargo').find('option:selected').text() : "" )+'">';
 			$('#listaUsuarios').append(usuario);
 			maximo_tesis++;
 		}
@@ -216,11 +250,20 @@ function mostrar_error_maximo(){
 	}
 }
 
-function eliminar_usuario(id, tipo_eliminado, element, event){
+function eliminar_usuario(id, tipo_eliminado, cargo, element, event){
 	event.preventDefault();
 	tipo_eliminado = parseInt(tipo_eliminado);
 	var hijos = $('#listaUsuarios').children();
 	var fila = $(element).closest('tr');
+
+	if(parseInt(cargo) === 0){
+		presidente--;
+	}else if(parseInt(cargo) === 1){
+		primero_vocal--;
+	}else if(parseInt(cargo) === 2){
+		segundo_vocal--;
+	}
+
 	$.each(hijos, function(indice, valor){
 		if(parseInt($(valor).val()) === parseInt(id)){
 			$(valor).remove();

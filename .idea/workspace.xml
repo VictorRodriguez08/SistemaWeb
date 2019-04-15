@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5a284252-7cb4-4a73-a7b1-8452f9a32690" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/css/estilo.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UsuarioController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UsuarioController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/UsuarioFormRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/UsuarioFormRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/tesis.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/tesis.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/administracion/emails/email.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/administracion/emails/email.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/administracion/usuario/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/administracion/usuario/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/administracion/usuario/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/administracion/usuario/edit.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/admin.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/admin.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/principal/tesis/editar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/principal/tesis/editar.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/principal/tesis/modal.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/principal/tesis/modal.blade.php" afterDir="false" />
     </list>
@@ -50,11 +41,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/User.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="122" column="39" selection-start-line="122" selection-start-column="39" selection-end-line="122" selection-end-column="39" />
+            <state relative-caret-position="408">
+              <caret line="32" column="33" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Usuario_tesis.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -63,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="59">
-              <caret line="17" column="47" lean-forward="true" selection-start-line="17" selection-start-column="47" selection-end-line="17" selection-end-column="47" />
+              <caret line="17" column="47" selection-start-line="17" selection-start-column="47" selection-end-line="17" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -83,8 +83,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/principal/tesis/editar.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="109" column="33" selection-start-line="109" selection-start-column="33" selection-end-line="109" selection-end-column="33" />
+            <state relative-caret-position="2380">
+              <caret line="140" column="138" selection-start-line="140" selection-start-column="138" selection-end-line="140" selection-end-column="138" />
             </state>
           </provider>
         </entry>
@@ -92,17 +92,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/principal/tesis/modal.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="53" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="53" />
+            <state relative-caret-position="407">
+              <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="52" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/js/tesis.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="274">
-              <caret line="72" column="67" lean-forward="true" selection-start-line="72" selection-start-column="67" selection-end-line="72" selection-end-column="67" />
+            <state relative-caret-position="98">
+              <caret line="165" column="28" selection-start-line="165" selection-start-column="28" selection-end-line="165" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -119,8 +119,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/administracion/usuario/edit.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="265" column="30" lean-forward="true" selection-start-line="265" selection-start-column="30" selection-end-line="265" selection-end-column="30" />
+            <state relative-caret-position="203">
+              <caret line="258" column="37" selection-start-line="254" selection-start-column="28" selection-end-line="258" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -191,13 +191,13 @@
         <option value="$PROJECT_DIR$/resources/views/layouts/admin.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/administracion/usuario/create.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Requests/UsuarioFormRequest.php" />
-        <option value="$PROJECT_DIR$/resources/views/principal/tesis/editar.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/administracion/usuario/edit.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/routes.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/UsuarioController.php" />
-        <option value="$PROJECT_DIR$/resources/views/principal/tesis/modal.blade.php" />
-        <option value="$PROJECT_DIR$/public/js/tesis.js" />
         <option value="$PROJECT_DIR$/app/User.php" />
+        <option value="$PROJECT_DIR$/resources/views/principal/tesis/modal.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/principal/tesis/editar.blade.php" />
+        <option value="$PROJECT_DIR$/public/js/tesis.js" />
       </list>
     </option>
   </component>
@@ -300,12 +300,6 @@
               <item name="sistemaWeb" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="sistemaWeb" type="b2602c69:ProjectViewProjectNode" />
-              <item name="sistemaWeb" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -363,7 +357,7 @@
       <workItem from="1554051262141" duration="101000" />
       <workItem from="1554051505081" duration="10690000" />
       <workItem from="1554418334805" duration="6772000" />
-      <workItem from="1555262712190" duration="11725000" />
+      <workItem from="1555262712190" duration="16539000" />
     </task>
     <task id="LOCAL-00001" summary="agregar y editar tesis">
       <created>1545854459249</created>
@@ -456,11 +450,18 @@
       <option name="project" value="LOCAL" />
       <updated>1554070693580</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="agregado filtro de busqueda por alumno asesor titulo y especialidad">
+      <created>1555281921985</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1555281921985</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108954000" />
+    <option name="totallyTimeSpent" value="113768000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -529,16 +530,10 @@
     <MESSAGE value="agregado envio de notificacion cuando un usuario es agregado a una tesis" />
     <MESSAGE value="correccion envio de notificacion al usuario con rol administrador cuando se registra un usuario nuevo" />
     <MESSAGE value="agregada seguridad por roles y crud de permisos en roles" />
-    <option name="LAST_COMMIT_MESSAGE" value="agregada seguridad por roles y crud de permisos en roles" />
+    <MESSAGE value="agregado filtro de busqueda por alumno asesor titulo y especialidad" />
+    <option name="LAST_COMMIT_MESSAGE" value="agregado filtro de busqueda por alumno asesor titulo y especialidad" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/Request.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Requests/RolRequest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-148">
@@ -786,20 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/principal/tesis/editar.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="109" column="33" selection-start-line="109" selection-start-column="33" selection-end-line="109" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/administracion/usuario/edit.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="265" column="30" lean-forward="true" selection-start-line="265" selection-start-column="30" selection-end-line="265" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Providers/AuthServiceProvider.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -813,7 +794,7 @@
     <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="59">
-          <caret line="17" column="47" lean-forward="true" selection-start-line="17" selection-start-column="47" selection-end-line="17" selection-end-column="47" />
+          <caret line="17" column="47" selection-start-line="17" selection-start-column="47" selection-end-line="17" selection-end-column="47" />
         </state>
       </provider>
     </entry>
@@ -824,24 +805,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/principal/tesis/modal.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/administracion/usuario/edit.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="53" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="53" />
+        <state relative-caret-position="203">
+          <caret line="258" column="37" selection-start-line="254" selection-start-column="28" selection-end-line="258" selection-end-column="37" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/tesis.js">
+    <entry file="file://$PROJECT_DIR$/app/Usuario_tesis.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="72" column="67" lean-forward="true" selection-start-line="72" selection-start-column="67" selection-end-line="72" selection-end-column="67" />
+        <state relative-caret-position="102">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/User.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="122" column="39" selection-start-line="122" selection-start-column="39" selection-end-line="122" selection-end-column="39" />
+        <state relative-caret-position="408">
+          <caret line="32" column="33" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/principal/tesis/modal.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/principal/tesis/editar.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2380">
+          <caret line="140" column="138" selection-start-line="140" selection-start-column="138" selection-end-line="140" selection-end-column="138" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/tesis.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="165" column="28" selection-start-line="165" selection-start-column="28" selection-end-line="165" selection-end-column="52" />
         </state>
       </provider>
     </entry>
