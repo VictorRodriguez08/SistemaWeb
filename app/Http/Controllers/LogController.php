@@ -53,7 +53,7 @@ class LogController extends Controller
                 $logs=Log::buscar($query, $query1, $rango_fechas);
 
                 if($request->get('esPdf') == "true"){
-                    $pdf=PDF::loadView('registro.log.show1',array('logs' => $logs));
+                    $pdf=PDF::loadView('reportes.carta_jurado',array('logs' => $logs));
                     return $pdf->stream('logs.pdf');
                 }else{
                     return view('registro.log.index',["logs"=>$logs,"searchText"=>$query,"searchText1"=>$query1]);
