@@ -163,6 +163,11 @@ function seleccionar_usuario(element){
 				$('#estado_id').find('option[value="' + PERFIL + '"]').attr('disabled','disabled');
 				$('#estado_id').find('option[value="' + ANTEPROYECTO + '"]').attr('disabled','disabled');
 
+				if($('#select_cargo').find('option:selected').attr('disabled')!== undefined || $('#select_cargo').val() === ""){
+				    maximo_jurados--;
+				    return console.log('Debe seleccionar un cargo para el jurado')
+                }
+
 				if(parseInt($('#select_cargo').val()) === 0){
 					presidente++;
 				}else if(parseInt($('#select_cargo').val()) === 1){
@@ -243,10 +248,10 @@ function mostrar_error_maximo(){
 		console.log("maximo de alumnos permitidos es 3")
 	}
 	if(maximo_asesores >= 1){
-		console.log("maximo de alumnos permitidos es 3")
+		console.log("maximo de asesores permitidos es 1")
 	}
 	if(maximo_juradoso >= 3){
-		console.log("maximo de alumnos permitidos es 3")
+		console.log("maximo de jurados permitidos es 3")
 	}
 }
 
@@ -263,6 +268,8 @@ function eliminar_usuario(id, tipo_eliminado, cargo, element, event){
 	}else if(parseInt(cargo) === 2){
 		segundo_vocal--;
 	}
+
+    $('#select_cargo').find('option[value="' + cargo + '"]').removeAttr('disabled');
 
 	$.each(hijos, function(indice, valor){
 		if(parseInt($(valor).val()) === parseInt(id)){
