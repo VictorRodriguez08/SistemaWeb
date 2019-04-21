@@ -26,6 +26,10 @@ class Tesis extends Model
             ->get();
     }
 
+    public function obtener_asesor(){
+        return $this->usuario_tesis()->where('rol','=','2')->first();
+    }
+
     public function archivos_tesis(){
         return $this->hasMany('sistemaWeb\ArchivosTesis');
     }

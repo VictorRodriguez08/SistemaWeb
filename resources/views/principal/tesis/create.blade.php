@@ -38,6 +38,36 @@
                             <br>
                         </div>
                     </div>
+                <div class="row">
+                        <div class="form-group{{ $errors->has('carrera') ? ' has-error' : '' }}">
+                            <label for="carrera" class="col-md-6 control-label">Carrera</label>
+                            <div class="col-md-6">
+                                <input type="text" name="carrera" id="carrera" class="form-control" required />
+                                @if ($errors->has('carrera'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('carrera') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                <div class="row">
+                        <div class="form-group{{ $errors->has('carrera') ? ' has-error' : '' }}">
+                            <label for="facultad" class="col-md-6 control-label">Facultad</label>
+                            <div class="col-md-6">
+                                <input type="text" name="facultad" id="facultad" class="form-control" required />
+                                @if ($errors->has('facultad'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('facultad') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
                     <div class="row">
                                 <input type="hidden" name="estado_id" id="estado_id" value="{{$ESTADOS_TESIS->PERFIL}}">
                     </div>

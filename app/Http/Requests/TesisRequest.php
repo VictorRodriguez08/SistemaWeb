@@ -26,6 +26,8 @@ class TesisRequest extends Request
         return [
             "titulo"=>"required",
             "estado_id"=>"required|integer",
+            "carrera"=>"required",
+            "facultad"=>"required",
             "fecha_ini"=>"required"
         ];
     }

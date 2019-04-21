@@ -14,6 +14,7 @@ use sistemaWeb\Http\Requests\TesisRequest;
 use sistemaWeb\Usuario_tesis;
 use sistemaWeb\User;
 use Gate;
+use PDF;
 
 class TesisController extends Controller
 {
@@ -42,6 +43,21 @@ class TesisController extends Controller
             return view('principal.tesis.index',['tesis'=>$tesis]);
         }
         return redirect('home');
+    }
+
+    public function generar_cartas($id, $tipo){
+            $tesis = Tesis::find($id);
+            if($tesis != null){
+                if($tipo == 3){
+                    $pdf=PDF::loadView('reportes.carta_asesor',array('tesis' => $tesis));
+                    return $pdf->stream('asesor.pdf');
+                }else{
+                    $pdf=PDF::loadView('reportes.carta_avances',array('tesis' => $tesis,'tipo'=>$tipo));
+                    return $pdf->stream('carta.pdf');
+                }
+
+            }
+            return false;
     }
 
     /**
@@ -76,6 +92,8 @@ class TesisController extends Controller
 
                     $tesis = new Tesis();
                     $tesis->titulo = $request->input('titulo');
+                    $tesis->carrera = $request->input('carrera');
+                    $tesis->facultad = $request->input('facultad');
                     $tesis->estado_id = $request->input('estado_id');
                     $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
                     $tesis->fecha_fin = $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;
@@ -167,6 +185,8 @@ class TesisController extends Controller
         if (Gate::allows('actualizar-tesis')) {
             $tesis = Tesis::find($id);
             $tesis->titulo = $request->input('titulo');
+            $tesis->carrera = $request->input('carrera');
+            $tesis->facultad = $request->input('facultad');
             $tesis->estado_id = $request->input('estado_id');
             $tesis->fecha_ini = date('Y-m-d', strtotime( $request->input('fecha_ini')));
             $tesis->fecha_fin =  $request->input('fecha_fin') != null ? date('Y-m-d', strtotime($request->input('fecha_fin'))) : null;

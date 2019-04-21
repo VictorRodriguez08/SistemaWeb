@@ -35,6 +35,7 @@
 						<th></th>
 						<th></th>
 						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,6 +48,11 @@
 							<td>
 								@if($puede_mostrar)
 								<a href="{{URL::action('TesisController@show',$t->id)}}" class="btn btn-default">Detalles</a>
+								@endif
+							</td>
+							<td>
+								@if($puede_mostrar)
+									<a href="#" onclick="cartas_avance('{{URL::action('TesisController@generar_cartas',$t->id)}}',event)" class="btn btn-default">Cartas de avance</a>
 								@endif
 							</td>
 							<td>

@@ -23,6 +23,7 @@ Route::get('tesis/GetUsuariosTesis/{id}','TesisController@GetUsuariosTesis');
 Route::get('usuario/GetUsuarios/{id}','UsuarioController@GetUsuarios');
 Route::post('tesis/SubirArchivo/','TesisController@SubirArchivo');
 Route::post('tesis/EliminarArchivo/{tesis_id}/{id?}','TesisController@EliminarArchivo');
+Route::get('tesis/generar_cartas/{tesis_id}/{tipo?}','TesisController@generar_cartas');
 Route::get('sendmail/{id}','MailController@email');
 Route::get('administracion/rol/create/{id}','RolController@create');
 
