@@ -43,6 +43,8 @@ function cartas_avance(url, event) {
             })
         }
     }).then(function (result) {
-        window.location = url + "/" + result.value;
+        if(result.value){
+            window.location = url + "/" + result.value;
+        }
     });
 }

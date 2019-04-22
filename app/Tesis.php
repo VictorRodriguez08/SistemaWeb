@@ -18,11 +18,9 @@ class Tesis extends Model
     }
 
     public static function obtener_todos(){
-        return DB::table("tesis")
-            ->select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
+        return self::select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
             ->join('estados', 'tesis.estado_id', '=', 'estados.id')
             ->orderBy('tesis.id', 'desc')
-            
             ->paginate(10);
     }
 
@@ -44,8 +42,15 @@ class Tesis extends Model
         return $this->usuario_tesis()->where('rol','=','2')->first();
     }
 
-    public function obtener_jurados(){
-        return $this->usuario_tesis()->where('rol','=','3')->get();
+    public static function obtener_jurados($id){
+        return DB::table("tesis")
+            ->select('users.name', 'users.apellidos','users.titulo','usuario_tesis.cargo')
+            ->join('estados', 'tesis.estado_id', '=', 'estados.id')
+            ->join('usuario_tesis', 'usuario_tesis.tesis_id', '=', 'tesis.id')
+            ->join('users', 'usuario_tesis.user_id', '=', 'users.id')
+            ->where('usuario_tesis.rol','=','3')
+            ->where('tesis.id','=',$id)
+            ->get();
     }
 
     public function archivos_tesis(){

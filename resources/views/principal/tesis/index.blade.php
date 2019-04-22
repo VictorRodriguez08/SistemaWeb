@@ -51,7 +51,7 @@
 								@endif
 							</td>
 							<td>
-								@if($puede_mostrar)
+								@if($puede_mostrar && $t->obtener_asesor() != null)
 									<a href="#" onclick="cartas_avance('{{URL::action('TesisController@generar_cartas',$t->id)}}',event)" class="btn btn-default">Cartas de avance</a>
 								@endif
 							</td>

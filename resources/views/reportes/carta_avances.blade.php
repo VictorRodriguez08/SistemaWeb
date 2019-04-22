@@ -133,18 +133,19 @@
     </header>
 
     <main>
-        @foreach($tesis->obtener_jurados() as $jurado)
+        @foreach($tesis->obtener_jurados($tesis->id) as $jurado)
                 @php
                     $i++;
                 @endphp
 
             <p class="fecha">Sonsonate {{strftime('%d de')}} {{obtener_mes(date('n'))}} de {{date('Y')}}</p>
             <p class="destinatario">
-                {{$tesis->obtener_asesor()->user->titulo}}
+                {{$jurado->titulo}}
                 <br>
-                {{$tesis->obtener_asesor()->user->name}} {{$tesis->obtener_asesor()->user->apellidos}}
+                {{$jurado->name}} {{$jurado->apellidos}}
                 <br>
-                {{$tesis->cargo}}
+                {{$cargos[$jurado->cargo]}} del Jurado Examinador
+                <br>
                 <br>
                 Presente
 
