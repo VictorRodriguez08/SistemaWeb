@@ -39,6 +39,10 @@ class TesisController extends Controller
     public function index()
     {
         if (Gate::allows('listar-tesis')) {
+
+            //return Tesis::buscar("Tesis Prueba Sistemas hh");
+            //return Tesis::find(21)->ultimo_archivo();
+
             $tesis = Tesis::obtener_todos();
             return view('principal.tesis.index',['tesis'=>$tesis]);
         }

@@ -75,6 +75,7 @@
 					@endforeach
 				</tbody>
 			</table>
+			{{$tesis->render()}}
 		</div>
 	</div>
 	@include('principal.tesis.modal_lista_usuarios')
