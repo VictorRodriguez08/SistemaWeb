@@ -30,6 +30,10 @@ class Tesis extends Model
         return $this->usuario_tesis()->where('rol','=','2')->first();
     }
 
+    public function obtener_jurados(){
+        return $this->usuario_tesis()->where('rol','=','3')->get();
+    }
+
     public function archivos_tesis(){
         return $this->hasMany('sistemaWeb\ArchivosTesis');
     }

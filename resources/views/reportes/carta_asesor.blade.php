@@ -162,18 +162,5 @@
                 
             </p>
         </main>
-
-    <footer>
-        <ul class="izquierda">
-            <li>Calle Ing. Jesús Adalberto Díaz Pineda y Avenida Central - Col. 14 de Diciembre, Sonsonate. El Salvador C.A. </li>
-            <li>Teléfono </li>
-            <li>Calle Ing. </li>
-            <li>Calle Ing. </li>
-            <li>Calle Ing. </li>
-        </ul>
-        <ul class="derecha">
-            <li>Recomenda el camino hacia la excelencia</li>
-        </ul>
-    </footer>
     </body>
 </html>
