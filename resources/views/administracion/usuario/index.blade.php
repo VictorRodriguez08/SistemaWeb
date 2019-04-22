@@ -17,7 +17,7 @@
 @extends ('layouts.admin')
 @section ('contenido')
 <div class="row">
-	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+	<div class="col-sm-12">
 		@can('crear-seguridad', auth()->user())
 		<h3>Listado de Usuarios <a href="usuario/create"> <button class="btn btn-success">Nuevo</button></a></h3>
 		@endcan
@@ -33,14 +33,13 @@
 			<table class="table table-striped table-bordered table-condensed table-hover">
 				<thead>
 					<tr>
-						<th width="20px">Id</th>
-						<th width="100px">Nombres</th>
-						<th width="100px">Apelidos</th>
-						<th width="200px">Email</th>
-						<th colspan="3">&nbsp</th>
-						<th>Opciones</th>
-						<th></th>
-						<th></th>
+						<th>Id</th>
+						<th >Nombres</th>
+						<th >Apelidos</th>
+						<th>Email</th>
+						
+						<th class="text-center">Opciones</th>
+						
 					</tr>
 				</thead>
 
@@ -52,20 +51,18 @@
 						<td>{{ $u->name}}</td>
 						<td>{{ $u->apellidos}}</td>
 						<td>{{ $u->email}}</td>
-						<th colspan="3">&nbsp</th>
-						<td>
+						<td style="width: 221px">
 							@if($puede_mostrar)
 							<a href="#" data-target="#modal_lista_usuarios-delete-{{$u->id}}" data-toggle="modal" title="Mostrar">
 								<button type="button" class="btn btn-primary btn-sm">Mostrar</button>
 							</a>
 							@endif
-						</td>
-						<td>
+
 							@if($puede_editar)
-							<a href="{{URL::action('UsuarioController@edit',$u->id)}}"><button class="btn btn-warning">Editar</button></a>
-							@endif
-						</td>
-						<td>
+							
+							<a href="{{URL::action('UsuarioController@edit',$u->id)}}"><button class="btn btn-warning">Editar</button></a>							
+							@endif	
+
 							@if($puede_eliminar)
 							<a href="" data-target="#modal-delete-{{$u->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>
 							@endif
@@ -99,4 +96,8 @@
 		</script>
 	@endif
 	<script src="{{asset('js/usuario_index.js')}}"></script>
+
+
 @endsection
+
+

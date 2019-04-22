@@ -274,8 +274,10 @@
                     </div>
                     <br><br><br>
                     <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Guardar</button>
-                        <button class="btn btn-danger" type="reset">Cancelar</button>
+                        <a href="#" onclick="confirmar()" class="btn btn-primary">Guardar</a>
+
+                        <a href="{{URL::action('UsuarioController@index')}}" class="btn btn-danger" type="reset">Cancelar</a>
+                        
                     </div>
 
 			{!!Form::close()!!}		
@@ -294,6 +296,34 @@
                     $('#divClave').addClass('hidden')
                 }
             });
-        });
+           
+         });
     </script>
+    
+    <script >
+
+
+        function confirmar(Form)
+            {
+                                Swal.fire({
+              title: '¿Desea Actualizar el Registro?',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Confirmar'
+              
+              
+            }).then((result) => {
+              if (result.value) {
+                $('Form').submit();
+              }
+            })
+            
+
+        }
+    
+    </script>
+
 @endsection
