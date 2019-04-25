@@ -171,8 +171,7 @@
                 El decanato realiza monitoreo de la ejecución del proceso, para el cual se incluye un formato de control de avance y seguimiento que deberá completarse
                 por ambas partes que permita posteriormente la gestion del pago de asesoría
                 <br><br>
-                Para conocimiento de las partes involucradas de las regulaciones de que deben ser respetadas y aplicadas, se anexa copia de los capítulos correspondientes
-                al reglamento de graduación vigente.
+                
                 <br><br>
                 Agradeciendo la atención a la presente me suscribo.
 
@@ -181,7 +180,7 @@
                 <p style="text-align: center">
                     {{$tesis->facultad == "Ingeniería y Ciencias Naturales" ? $decanos[0] : $decanos[1]}}
                     <br>
-                    Decano de la {{$tesis->facultad}}
+                    Decano de la Facultad {{$tesis->facultad}}
                 </p>
             @if($i<3)
                 <div class="pagebreak"></div>
