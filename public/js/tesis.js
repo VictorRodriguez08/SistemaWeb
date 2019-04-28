@@ -205,7 +205,7 @@ function seleccionar_usuario(element){
 			datos += "</tr>";
 			$('#tbodyUsuariosTesis').append(datos);
 
-			var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + "_" + tipo_agregado + (check_jurado ? "_" + $('#select_cargo').find('option:selected').text() : "" )+'">';
+			var usuario = '<input name="usuario_id[]" type="hidden" value="' + $(fila.children('td')[0]).text() + "_" + tipo_agregado + (check_jurado ? "_" + $('#select_cargo').val() : "" )+'">';
 			$('#listaUsuarios').append(usuario);
 			maximo_tesis++;
 		}

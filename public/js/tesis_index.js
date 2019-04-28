@@ -44,7 +44,7 @@ function cartas_avance(url, event) {
         }
     }).then(function (result) {
         if(result.value){
-            window.location = url + "/" + result.value;
+            window.open(url + "/" + result.value, '_blank');
         }
     });
 }

@@ -212,7 +212,7 @@
             </div>
             <div id="listaUsuarios">
                 @foreach($tesis->usuario_tesis as $u)
-                    <input name="usuario_id[]" type="hidden" value="{{$u->user->id}}_{{$u->rol}}" />
+                    <input name="usuario_id[]" type="hidden" value="{{$u->user->id}}_{{$u->rol}}_{{$u->cargo}}" />
                     @php
                         switch($u->rol){
                             case 1:

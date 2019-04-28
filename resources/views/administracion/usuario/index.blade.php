@@ -63,7 +63,7 @@
 							<a href="{{URL::action('UsuarioController@edit',$u->id)}}"><button class="btn btn-warning">Editar</button></a>							
 							@endif	
 
-							@if($puede_eliminar)
+							@if($puede_eliminar && count($u->usuario_tesis) == 0 && count($u->autor_congreso) == 0)
 							<a href="" data-target="#modal-delete-{{$u->id}}" data-toggle="modal"><button class="btn btn-danger">Eliminar</button></a>
 							@endif
 						</td>

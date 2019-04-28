@@ -212,6 +212,7 @@ class TesisController extends Controller
                     $usuario = new Usuario_tesis();
                     $usuario->user_id = explode('_',$usuario_id)[0];
                     $usuario->rol = explode('_',$usuario_id)[1];
+                    $usuario->cargo = explode('_',$usuario_id)[2];
                     $usuario->tesis_id = $tesis->id;
 
                     $usuario->save();

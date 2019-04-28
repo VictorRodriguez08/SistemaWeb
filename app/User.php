@@ -38,6 +38,10 @@ class User extends Authenticatable
         return $this->hasMany('sistemaWeb\RoleUser');
     }
 
+    public function autor_congreso(){
+        return $this->hasMany('sistemaWeb\AutoresCongreso');
+    }
+
     public function primer_rol(){
         $primer_rol = $this->rol_usuario()->first();
         if($primer_rol == null){
