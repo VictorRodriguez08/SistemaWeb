@@ -28,6 +28,8 @@
     <link href="{{asset('css/bootstrap-tagsinput.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/estilo.css')}}" rel="stylesheet" type="text/css" />
 
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
   </head>
   <body class="hold-transition skin-green sidebar-mini">
     <div class="wrapper">
@@ -279,6 +281,7 @@
      <script src="https://unpkg.com/gijgo@1.9.11/js/messages/messages.es-es.js" type="text/javascript"></script>
      <script src="{{asset('js/dropzone.js')}}" type="text/javascript"></script>
      <script src="{{asset('js/bootstrap-tagsinput.min.js')}}" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
     @yield('scripts')
     <script>

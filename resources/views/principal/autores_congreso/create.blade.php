@@ -24,37 +24,46 @@
                         </div>
                         <div class="form-group">
                             <label>* Nombre del autor 1</label>
-                            <select name="user_id_1" class="form-control" required>
+                            <select name="user_id" id="user_id" class="form-control" required>
                              <option value="">--Selecione un autor--</option>
                              @foreach($users as $user)
 
                             <option value="{{$user->id}}"> {{ $user->name}}{{" "}}{{$user->apellidos}}</option>
                             @endforeach
                             </select>
-                        </div> 
+                        </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-10">
+                            <h4>Ingrese los usuarios que pertenecen a la Tesis</h4>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <a href="#" id="btnBuscarUsuario" class="btn btn-primary">Agregar</a>
+                        </div>
+                    </div>
+                <div class="col-xs-12">
+                    <div class="table-responsibe">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th class="hidden"></th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbodyAutoresCongreso">
 
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="listaUsuarios"></div>
+                    <div class="from-group">
+                        <button class="btn btn-primary" type="submit">Guardar</button>
+                        <a href="{{URL::action('TesisController@index')}}" class="btn btn-danger" type="reset">Cancelar</a>
 
-                        <div class="form-group">
-                            <label> Nombre del autor 2</label>
-                            <select name="user_id_2" class="form-control">
-                             <option value="">--Selecione un autor--</option>
-                             @foreach($users as $user)
+                    </div>
+                </div>
 
-                            <option value="{{$user->id}}"> {{ $user->name}}{{" "}}{{$user->apellidos}}</option>
-                            @endforeach
-                            </select>
-                        </div> 
-
-                        <div class="form-group">
-                            <label> Nombre del autor 3</label>
-                            <select name="user_id_3" class="form-control">
-                             <option value="">--Selecione un autor--</option>
-                             @foreach($users as $user)
-
-                            <option value="{{$user->id}}"> {{ $user->name}}{{" "}}{{$user->apellidos}}</option>
-                            @endforeach
-                            </select>
-                        </div> 
 
                         <div class="form-group">
                             <label>* Selecione CongresoCongreso</label>
@@ -158,6 +167,68 @@
         </div>
 @endsection
 
+@section('scripts')
 
+    <script>
+        var lista_usuarios = [];
+
+        $(document).ready(function() {
+            $('#user_id').select2();
+
+            $('#user_id').change(function(){
+                agregar_usuario($(this).val(), $(this).find('option:selected').text());
+            });
+        });
+
+        function agregar_usuario(id_usuario, nombre){
+            if(usuario_existe(id_usuario) === false){
+                var u = {
+                    id: parseInt(id_usuario),
+                    nombre:nombre
+                };
+
+                lista_usuarios.push(u);
+                cargar_tabla();
+            }
+        }
+
+        function cargar_tabla(){
+            var datos = "";
+
+            $('#tbodyAutoresCongreso').html("");
+
+            for(var i=0; i< lista_usuarios.length;i++){
+                datos = "";
+                datos += "<tr>";
+                    datos += "<td>";
+                        datos += "<a href='#' class='btn btn-danger' onclick='eliminar_usuario("+ i + ", event)'>Eliminar</a>";
+                    datos += "</td>";
+                    datos += "<td>";
+                        datos += lista_usuarios[i].nombre;
+                    datos += "</td>";
+                datos += "</tr>";
+
+                $('#tbodyAutoresCongreso').append(datos);
+            }
+        }
+
+        function usuario_existe(id){
+            var result=false;
+            for(var i=0; i< lista_usuarios.length; i++){
+                if(lista_usuarios[i].id === parseInt(id)){
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        function eliminar_usuario(indice,event ){
+            event.preventDefault();
+
+            lista_usuarios.splice(parseInt(indice),1);
+            cargar_tabla();
+        }
+    </script>
+@endsection
 
 

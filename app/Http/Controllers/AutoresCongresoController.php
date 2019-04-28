@@ -28,9 +28,7 @@ class AutoresCongresoController extends Controller
         {
             $query=trim($request->get('searchText'));
             $autores_congresos=DB::table('autores_congreso as ac')
-            ->join('users as u','ac.user_id_1','=','u.id')
-            ->join('users as us','ac.user_id_2','=','us.id')
-            ->join('users as usu','ac.user_id_3','=','usu.id')
+            ->join('users as u','ac.user_id','=','u.id')
             ->join('congreso as c','ac.congreso_id','=','c.id')
             ->select('ac.id','u.name as user_n','u.apellidos as user_a','us.name as user_n1','us.apellidos as user_a1','usu.name as user_n3','usu.apellidos as user_a3','c.nombre as con','ac.carrera','ac.tema','ac.dia')
             ->where('ac.tema','LIKE','%'.$query.'%')
