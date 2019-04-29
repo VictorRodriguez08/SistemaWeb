@@ -13,6 +13,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th class="hidden" id="colAdicional"></th>
                             </tr>
                         </thead>
                         <tbody id="tablaListaUsuarios">

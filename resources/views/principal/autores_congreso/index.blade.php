@@ -8,6 +8,7 @@
 </div>
 
 <input type="hidden" value="{{url('autores_congreso/GetAutoresCongreso')}}" id="urlListarUsuarios">
+<input type="hidden" value="{{url('congreso/GetArchivos', array('id'=>''))}}" id="urlListarArchivos">
 
 
 	<div class="col-sm-12">
@@ -20,6 +21,7 @@
 						<th>Tema</th>
 						<th>Dia</th>
 						<th></th>
+						<th></th>
 						<th>Opciones</th>
 						<th></th>
 					</tr>
@@ -31,6 +33,9 @@
 							<td>{{ $ac->carrera}}</td>
 							<td>{{ $ac->tema}}</td>
 							<td>{{ $ac->dia}}</td>
+							<th>
+								<a href="#" class="btn btn-default" onclick="ver_archivos({{$ac->id}},event)">Ver Archivos</a>
+							</th>
 							<th>
 								<a href="#" class="btn btn-default" onclick="ver_usuarios({{$ac->id}},event)">Ver Autores</a>
 							</th>

@@ -2,6 +2,7 @@
 
 namespace sistemaWeb\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 use phpDocumentor\Reflection\Types\Object_;
@@ -57,6 +58,10 @@ class AutoresCongresoController extends Controller
 
 
                 $id = 0;
+
+                $file = $request->file('url_archivo');
+
+
                 foreach($usuarios as $u){
 
                     $autores_congreso=new AutoresCongreso;
@@ -66,6 +71,7 @@ class AutoresCongresoController extends Controller
                     $autores_congreso->carrera = $request->get('carrera');
                     $autores_congreso->tema = $request->get('tema');
                     $autores_congreso->dia = $request->get('dia');
+                    $autores_congreso->url_archivo = ".". $file->getClientOriginalExtension();
                     $autores_congreso->save();
 
                     if($id==0){
@@ -73,13 +79,13 @@ class AutoresCongresoController extends Controller
                     }
                 }
 
-                $file = $request->file('url_archivo');
+
                 $destinationPath = 'uploads/congreso/archivos/' . $id;
                 $archivoCongreso = new ArchivosCongreso();
-                $archivoCongreso->nombre_archivo = $file->getClientOriginalName();
+                $archivoCongreso->nombre_archivo =  $request->get('tema').".".$file->getClientOriginalExtension();
                 $archivoCongreso->congreso_id = $id;
                 $archivoCongreso->save();
-                $file->move($destinationPath,$file->getClientOriginalName());
+            $file->move($destinationPath, $archivoCongreso->nombre_archivo);
 
                 Log::agregar_log('tabla Autores Congreso',Auth()->user()->id, 'Autor de Congreso creado con id: '.$autores_congreso->id);
 
@@ -128,10 +134,10 @@ class AutoresCongresoController extends Controller
             if($file != null){
                 $destinationPath = 'uploads/congreso/archivos/' . $usuarios_anteriores[0]['congreso_id'];
                 $archivoCongreso = new ArchivosCongreso();
-                $archivoCongreso->nombre_archivo = $file->getClientOriginalName();
+                $archivoCongreso->nombre_archivo = $request->get('tema').".".$file->getClientOriginalExtension();
                 $archivoCongreso->congreso_id = $usuarios_anteriores[0]['congreso_id'];
                 $archivoCongreso->save();
-                $file->move($destinationPath,$file->getClientOriginalName());
+                $file->move($destinationPath, $archivoCongreso->nombre_archivo);
 
                 $nombre_archivo = $archivoCongreso->nombre_archivo;
             }
@@ -147,6 +153,10 @@ class AutoresCongresoController extends Controller
                 $autores_congreso->congreso_id = $request->get('congreso_id');
                 $autores_congreso->carrera = $request->get('carrera');
                 $autores_congreso->tema = $request->get('tema');
+
+                if($file != null){
+                    $autores_congreso->url_archivo = ".". $file->getClientOriginalExtension();
+                }
 
                 $autores_congreso->dia = $request->get('dia');
                 $autores_congreso->save();
@@ -199,21 +209,29 @@ class AutoresCongresoController extends Controller
     }
 
     public function GetArchivos($id){
-        $autor_congreso = AutoresCongreso::find($id);
 
-        $datos = array();
+        $autor = AutoresCongreso::find($id);
 
-        if($autor_congreso != null){
+        if($autor!=null){
+            $archivos = ArchivosCongreso::where('nombre_archivo','=',$autor->tema . $autor->url_archivo)->get();
 
-            foreach ($autor_congreso as $autor){
-                $datos[] = array(
-                    'id'=>$id,
-                    'url_archivo'=>$autor->url_archivo
-                );
+            $datos = array();
+
+            if($archivos != null){
+
+                foreach ($archivos as $archivo){
+                    $datos[] = array(
+                        'id'=>$archivo->id,
+                        'nombre_archivo'=>$archivo->nombre_archivo,
+                        'ruta_archivo'=> 'uploads/congreso/archivos/' . $autor->congreso_id . "/" . $archivo->nombre_archivo
+                    );
+                }
+
+                return $datos;
             }
-
-            return $datos;
         }
+
+
 
         return null;
     }
