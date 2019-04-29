@@ -23,13 +23,22 @@ class AutoresCongresoFormRequest extends Request
      */
     public function rules()
     {
+        if ($this->method()=='PATCH')
+        {
+            $url_archivo='';
+        }
+        else
+        {
+            $url_archivo="required";
+        }
+
         return [
-            "user_id_1"=>"required",
+            "usuario_id"=>"required",
             "congreso_id"=>"required",
             "carrera"=>"required",
             "tema"=>"required",
-            "url_archivo"=>"required",
             "dia"=>"required",
+            'url_archivo'=>$url_archivo
         ];
     }
 }

@@ -4,6 +4,8 @@ namespace sistemaWeb\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use phpDocumentor\Reflection\Types\Object_;
+use sistemaWeb\ArchivosCongreso;
 use sistemaWeb\Http\Requests;
 use sistemaWeb\AutoresCongreso;
 use sistemaWeb\Log;
@@ -27,12 +29,7 @@ class AutoresCongresoController extends Controller
          if ($request)
         {
             $query=trim($request->get('searchText'));
-            $autores_congresos=DB::table('autores_congreso as ac')
-            ->join('users as u','ac.user_id','=','u.id')
-            ->join('congreso as c','ac.congreso_id','=','c.id')
-            ->select('ac.id','u.name as user_n','u.apellidos as user_a','us.name as user_n1','us.apellidos as user_a1','usu.name as user_n3','usu.apellidos as user_a3','c.nombre as con','ac.carrera','ac.tema','ac.dia')
-            ->where('ac.tema','LIKE','%'.$query.'%')
-            ->orderBy('id','desc')
+            $autores_congresos=AutoresCongreso::groupBy('tema')->orderBy('id','desc')
             ->paginate(7);
             return view('principal.autores_congreso.index',["autores_congresos"=>$autores_congresos,"searchText"=>$query]);
         } 	
@@ -56,18 +53,35 @@ class AutoresCongresoController extends Controller
     	try {
     		\DB::beginTransaction();
 
-    		$autores_congreso=new AutoresCongreso;
-	    	$autores_congreso->user_id_1=$request->get('user_id_1');
-	    	$autores_congreso->congreso_id=$request->get('congreso_id');
-	    	$autores_congreso->carrera=$request->get('carrera');
-	    	$autores_congreso->tema=$request->get('tema');
-	    	$autores_congreso->url_archivo=$request->get('url_archivo');
-	    	$autores_congreso->dia=$request->get('dia');
-            $autores_congreso->user_id_2=$request->get('user_id_2');
-            $autores_congreso->user_id_3=$request->get('user_id_3');
-	    	$autores_congreso->save();
+                $usuarios = $request->get('usuario_id');
 
-	        Log::agregar_log('tabla Autores Congreso',Auth()->user()->id, 'Autor de Congreso creado con id: '.$autores_congreso->id);
+
+                $id = 0;
+                foreach($usuarios as $u){
+
+                    $autores_congreso=new AutoresCongreso;
+
+                    $autores_congreso->user_id= $u;
+                    $autores_congreso->congreso_id = $request->get('congreso_id');
+                    $autores_congreso->carrera = $request->get('carrera');
+                    $autores_congreso->tema = $request->get('tema');
+                    $autores_congreso->dia = $request->get('dia');
+                    $autores_congreso->save();
+
+                    if($id==0){
+                        $id = $autores_congreso->congreso_id;
+                    }
+                }
+
+                $file = $request->file('url_archivo');
+                $destinationPath = 'uploads/congreso/archivos/' . $id;
+                $archivoCongreso = new ArchivosCongreso();
+                $archivoCongreso->nombre_archivo = $file->getClientOriginalName();
+                $archivoCongreso->congreso_id = $id;
+                $archivoCongreso->save();
+                $file->move($destinationPath,$file->getClientOriginalName());
+
+                Log::agregar_log('tabla Autores Congreso',Auth()->user()->id, 'Autor de Congreso creado con id: '.$autores_congreso->id);
 
 	        \DB::commit();
             return redirect('autores_congreso/')->with('message', 'Autor de congreso creado correctamente');
@@ -83,23 +97,60 @@ class AutoresCongresoController extends Controller
 
     public function edit($id)
     {
-    	return view("principal.autores_congreso.edit",["autores_congreso"=>AutoresCongreso::findOrFail($id)]);
+        $users = User::all();
+        $congresos = Congreso::all();
+
+        $autores = $this->GetAutoresCongreso($id);
+        $autor_congreso = AutoresCongreso::find($id);
+
+    	return view("principal.autores_congreso.edit",['users'=>$users,'congresos'=>$congresos,"autores_congreso"=>$autores, 'autor_congreso'=>$autor_congreso]);
     }
 
-    public function update(CongresoFormRequest $request ,$id)
+    public function update(AutoresCongresoFormRequest $request ,$id)
     {
     	try {
     		\DB::beginTransaction();
 
-    		$autores_congreso=AutoresCongreso::findOrFail($id);;
-	    	$autores_congreso->user_id=$request->get('user_id');
-	    	$autores_congreso->congreso_id=$request->get('congreso_id');
-	    	$autores_congreso->carrera=$request->get('carrera');
-	    	$autores_congreso->tema=$request->get('tema');
-	    	$autores_congreso->url_archivo=$request->get('url_archivo');
-	    	$autores_congreso->dia=$request->get('dia');
+            $usuarios = $request->get('usuario_id');
 
-    		$congreso->update();
+            //Eliminar los usuario congreso anteriores
+            $usuarios_anteriores = $this->GetAutoresCongreso($id);
+
+            foreach ($usuarios_anteriores as $usuario){
+                $autor = AutoresCongreso::find($usuario['id_autor']);
+
+                if($autor != null)
+                    $autor->delete();
+            }
+
+            $file = $request->file('url_archivo');
+
+            if($file != null){
+                $destinationPath = 'uploads/congreso/archivos/' . $usuarios_anteriores[0]['congreso_id'];
+                $archivoCongreso = new ArchivosCongreso();
+                $archivoCongreso->nombre_archivo = $file->getClientOriginalName();
+                $archivoCongreso->congreso_id = $usuarios_anteriores[0]['congreso_id'];
+                $archivoCongreso->save();
+                $file->move($destinationPath,$file->getClientOriginalName());
+
+                $nombre_archivo = $archivoCongreso->nombre_archivo;
+            }
+
+            foreach($usuarios as $u){
+
+                if($id==0){
+                    $id = $u;
+                }
+                $autores_congreso=new AutoresCongreso;
+
+                $autores_congreso->user_id= $u;
+                $autores_congreso->congreso_id = $request->get('congreso_id');
+                $autores_congreso->carrera = $request->get('carrera');
+                $autores_congreso->tema = $request->get('tema');
+
+                $autores_congreso->dia = $request->get('dia');
+                $autores_congreso->save();
+            }
 
         	Log::agregar_log('tabla Autores Congreso',Auth()->user()->id, 'Autor de congreso modificado con id: '.$autores_congreso->id);
 
@@ -108,7 +159,6 @@ class AutoresCongresoController extends Controller
     		
     	} catch (Exception $e) {
     		\DB::rollback();
-    		
     	}
     	
 
@@ -121,14 +171,20 @@ class AutoresCongresoController extends Controller
     	try {
     		\DB::beginTransaction();
 
-	    	\DB::table('autores_congreso')->where('id', '=' , $id)->delete();
+    		$usuarios = $this->GetAutoresCongreso($id);
 
-	    	Log::agregar_log('tabla Autores Congreso',Auth()->user()->id, 'Autor de congreso eliminado con id: ' .$id);
+    		if(count($usuarios) > 0){
+                foreach ($usuarios as $usuario){
+                    \DB::table('autores_congreso')->where('id', '=' , $usuario['id_autor'])->delete();
+                }
+
+                Log::agregar_log('tabla Autores Congreso',Auth()->user()->id, 'Autor de congreso eliminado con id: ' .$id);
+            }
+
 	    	\DB::commit();
     		
     	} catch (Exception $e) {
     		\DB::rollback();
-    		
     	}
 
     	return Redirect::to('autores_congreso');
@@ -140,6 +196,51 @@ class AutoresCongresoController extends Controller
         $aleatorio=str_random(6);
         $nombre= $aleatorio.'-'.$file->getClientOriginalName();
         $file->move('uploads',$nombre);
+    }
+
+    public function GetArchivos($id){
+        $autor_congreso = AutoresCongreso::find($id);
+
+        $datos = array();
+
+        if($autor_congreso != null){
+
+            foreach ($autor_congreso as $autor){
+                $datos[] = array(
+                    'id'=>$id,
+                    'url_archivo'=>$autor->url_archivo
+                );
+            }
+
+            return $datos;
+        }
+
+        return null;
+    }
+
+    public function GetAutoresCongreso($id){
+        $autor_congreso = AutoresCongreso::find($id);
+
+        $datos = array();
+
+        if($autor_congreso != null){
+            $autores = AutoresCongreso::where('congreso_id','=',$autor_congreso->congreso_id)
+                ->where('tema','=',$autor_congreso->tema)
+                ->where('carrera','=',$autor_congreso->carrera)->get();
+
+            foreach ($autores as $autor){
+                $datos[] = array(
+                    'id_autor'=>$autor->id,
+                    'id'=>$autor->user->id,
+                    'congreso_id'=>$autor->congreso_id,
+                    'nombre'=>$autor->user->name . " " . $autor->user->apellidos
+                );
+            }
+
+            return $datos;
+        }
+
+        return null;
 
     }
 }

@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">X</span>
                 </button>
-                <h4 class="modal-title">Lista de Usuarios que pertenecen a la Tesis</h4>
+                <h4 class="modal-title">Lista de Usuarios que pertenecen al Congreso</h4>
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
@@ -13,7 +13,6 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="tablaListaUsuarios">

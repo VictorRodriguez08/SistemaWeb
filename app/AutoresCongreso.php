@@ -16,4 +16,8 @@ class AutoresCongreso extends Model
     public function user(){
         return $this->belongsTo('sistemaWeb\User');
     }
+
+    public function congreso(){
+        return $this->belongsTo('sistemaWeb\Congreso');
+    }
 }

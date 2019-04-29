@@ -13,148 +13,118 @@
                 </div>
                 @endif
 
-                {!!Form::Open(array('url'=>'autores_congreso', 'method'=>'POST','autocomplete'=>'off'))!!}
+                {!!Form::Open(array('url'=>'autores_congreso', 'method'=>'POST','autocomplete'=>'off',"enctype"=>"multipart/form-data"))!!}
                     {{Form::token()}}
-                        <div class="row">
-                            <div class="col-lg-6">
-                                
-                                <h5>* Campo Obligatorio</h5>
-                                <label> </label><label> </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>* Nombre del autor 1</label>
-                            <select name="user_id" id="user_id" class="form-control" required>
-                             <option value="">--Selecione un autor--</option>
-                             @foreach($users as $user)
+                <div class="col">
 
-                            <option value="{{$user->id}}"> {{ $user->name}}{{" "}}{{$user->apellidos}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-10">
-                            <h4>Ingrese los usuarios que pertenecen a la Tesis</h4>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <a href="#" id="btnBuscarUsuario" class="btn btn-primary">Agregar</a>
-                        </div>
-                    </div>
-                <div class="col-xs-12">
-                    <div class="table-responsibe">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th class="hidden"></th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tbodyAutoresCongreso">
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="listaUsuarios"></div>
-                    <div class="from-group">
-                        <button class="btn btn-primary" type="submit">Guardar</button>
-                        <a href="{{URL::action('TesisController@index')}}" class="btn btn-danger" type="reset">Cancelar</a>
-
-                    </div>
+                    <h5>* Campo Obligatorio</h5>
+                    <label> </label><label> </label>
                 </div>
 
+                    <div class="form-group">
+                        <label>* Selecione CongresoCongreso</label>
+                        <select name="congreso_id" class="form-control" required>
+                            <option value="">--Selecione un congreso--</option>
+                            @foreach($congresos as $congreso)
 
-                        <div class="form-group">
-                            <label>* Selecione CongresoCongreso</label>
-                            <select name="congreso_id" class="form-control">
-                             <option value="">--Selecione un congreso--</option>
-                             @foreach($congresos as $congreso)
-
-                            <option value="{{$congreso->id}}"> {{ $congreso->nombre}}</option>
+                                <option value="{{$congreso->id}}"> {{ $congreso->nombre}}</option>
                             @endforeach
-                            </select>
-                        </div> 
+                        </select>
+                    </div>
 
 
-                            <div class="row">
+                    <div class="form-group">
+                        <label>* Nombre del autor 1</label>
+                        <select name="user_id" id="user_id" class="form-control" required>
+                            <option value="">--Selecione un autor--</option>
+                            @foreach($users as $user)
+
+                                <option value="{{$user->id}}"> {{ $user->name}}{{" "}}{{$user->apellidos}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="table-responsibe">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="hidden"></th>
+                                    <th>Nombre</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbodyAutoresCongreso">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="listaUsuarios"></div>
+                    </div>
+
+                    <div id="divUsuarios">
+
+                    </div>
                                 
-                                <div class="form-group{{ $errors->has('carrera') ? ' has-error' : '' }}">
-                                    <label for="carrera" class="col-md-4 control-label">Carrera <label>*</label></label>
+                    <div class="form-group{{ $errors->has('carrera') ? ' has-error' : '' }}">
+                        <label for="carrera" class="control-label">Carrera <label>*</label></label>
 
-                                        <div class="col-md-8">
-                                            <input id="carrera" type="text" class="form-control" name="carrera" value="{{ old('carrera') }}" placeholder="Carrera que estudia">
+                            <div class="">
+                                <input id="carrera" type="text" class="form-control" name="carrera" value="{{ old('carrera') }}" placeholder="Carrera que estudia" required>
 
-                                            @if ($errors->has('carrera'))
-                                                <span class="help-block">
-                                                    <strong>{{ $errors->first('carrera') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    <br>
-                                    <br>
-
-                                    </div>
-                                </div>
-
-                            <div class="row">
-                                <div class="form-group{{ $errors->has('tema') ? ' has-error' : '' }}">
-                                    <label for="Tema" class="col-md-4 control-label">Tema <label>*</label></label>
-
-                                    <div class="col-md-8">
-                                        <input id="tema" type="text" class="form-control" name="tema" value="{{ old('tema') }}" placeholder="Digite Tema">
-
-                                        @if ($errors->has('tema'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('tema') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                    <br>
-                                    <br>
-
-                                </div>
+                                @if ($errors->has('carrera'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('carrera') }}</strong>
+                                    </span>
+                                @endif
                             </div>
+                    </div>
+
+
+                    <div class="form-group{{ $errors->has('tema') ? ' has-error' : '' }}">
+                        <label for="Tema" class=" control-label">Tema <label>*</label></label>
+
+                        <div class="">
+                            <input id="tema" type="text" class="form-control" name="tema" value="{{ old('tema') }}" placeholder="Digite Tema" required>
+
+                            @if ($errors->has('tema'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('tema') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                    </div>
                             
 
-                            <div class="form-group">
-                                <label>* Dias de la Semana</label>
-                                <select name="dia" class="form-control">
-                                    <option value="Lunes">Lunes</option>
-                                    <option value="Martes">Martes</option>
-                                    <option value="Miercoles">Miercoles</option>
-                                    <option value="Jueves">Jueves</option>
-                                    <option value="Viernes">Viernes</option>
-                                    <option value="Sabado">Sabado</option>
-                                    <option value="Domingo">Domingo</option>
-                                </select>
-                                
-                            </div>    
+                    <div class="form-group">
+                        <label>* Dias de la Semana</label>
+                        <select name="dia" class="form-control" required>
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miercoles">Miercoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sabado">Sabado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
 
-                            <div class="row">
-                                <div class="form-group{{ $errors->has('url_archivo') ? ' has-error' : '' }}">
-                                    <label for="Tema" class="col-md-4 control-label">URL Archivo <label>*</label></label>
-                                    <form action="{{URL::action('AutoresCongresoController@uploading')}}" enctype="multipart/form-data">
-                                        {{ csrf_field() }}
-                                        <input type="file" name="url_archivo" id="url_archivo">
-                                        <input type="submit">
-                                    </form>
-                                    <div class="col-md-8">
-                                        <input id="url_archivo" type="text" class="form-control" name="url_archivo" value="{{ old('tema') }}" placeholder="Digite Tema">
+                    </div>
 
-                                        @if ($errors->has('url_archivo'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('url_archivo') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                    <br>
-                                    <br>
+                    <div class="row">
+                        <div class="form-group{{ $errors->has('url_archivo') ? ' has-error' : '' }}">
+                            <label for="Tema" class="col-md-4 control-label">URL Archivo <label>*</label></label>
 
-                                </div>
+                            <input type="file" name="url_archivo" id="url_archivo" required>
+                            <div class="col-md-8">
+                                @if ($errors->has('url_archivo'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('url_archivo') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-                            
-
+                        </div>
+                    </div>
 
                 <div class="from-group">
                     <button class="btn btn-primary" type="submit">Guardar</button>
@@ -196,6 +166,7 @@
             var datos = "";
 
             $('#tbodyAutoresCongreso').html("");
+            $('#divUsuarios').html('');
 
             for(var i=0; i< lista_usuarios.length;i++){
                 datos = "";
@@ -209,6 +180,8 @@
                 datos += "</tr>";
 
                 $('#tbodyAutoresCongreso').append(datos);
+
+                $('#divUsuarios').append('<input type="hidden" name="usuario_id[]" value="'+ lista_usuarios[i].id +'"/>');
             }
         }
 

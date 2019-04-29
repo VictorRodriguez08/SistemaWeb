@@ -6,18 +6,20 @@
 		@include('principal.autores_congreso.search')
 	</div>
 </div>
+
+<input type="hidden" value="{{url('autores_congreso/GetAutoresCongreso')}}" id="urlListarUsuarios">
+
+
 	<div class="col-sm-12">
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-condensed table-hover">
 				<thead>
 					<tr>
-						<th>ID</th>
-						<th>Nombre de Autor</th>
 						<th>Congreso</th>
 						<th>Carrera</th>
 						<th>Tema</th>
 						<th>Dia</th>
-						<th colspan="3">&nbsp</th>
+						<th></th>
 						<th>Opciones</th>
 						<th></th>
 					</tr>
@@ -25,13 +27,13 @@
 				<tbody>
 					@foreach ($autores_congresos as $ac)
 						<tr>
-							<td>{{$ac->id}}</td>
-							<td>{{ $ac->user_n}}{{" "}}{{ $ac->user_a}}{{",  "}}{{ $ac->user_n1}}{{" "}}{{ $ac->user_a1}}{{",  "}}{{ $ac->user_n3}}{{" "}}{{ $ac->user_a3}}</td>
-							<td>{{ $ac->con}}</td>
+							<td>{{ $ac->congreso->nombre}}</td>
 							<td>{{ $ac->carrera}}</td>
 							<td>{{ $ac->tema}}</td>
 							<td>{{ $ac->dia}}</td>
-							<th colspan="3">&nbsp</th>
+							<th>
+								<a href="#" class="btn btn-default" onclick="ver_usuarios({{$ac->id}},event)">Ver Autores</a>
+							</th>
 							<td>
 								<a href="{{URL::action('AutoresCongresoController@edit',$ac->id)}}"><button class="btn btn-warning">Editar</button></a>
 							</td>
@@ -46,6 +48,8 @@
 		</div>
 		{{$autores_congresos->render()}}
 	</div>
+
+	@include('principal.autores_congreso.modal_lista_usuarios')
 	
 @endsection
 
@@ -61,5 +65,5 @@
 			})
 		</script>
 	@endif
-	<script src="{{asset('js/tesis_index.js')}}"></script>
+	<script src="{{asset('js/autor_congreso_index.js')}}"></script>
 @endsection

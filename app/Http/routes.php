@@ -33,6 +33,8 @@ Route::get('descargar/{searchText}','LogController@pdf');
 Route::resource('inicio','InicioController');
 Route::resource('congreso','CongresoController');
 Route::resource('autores_congreso','AutoresCongresoController');
+Route::resource('autores_congreso/GetArchivos/{id?}','AutoresCongresoController@GetArchivos');
+Route::get('autores_congreso/GetAutoresCongreso/{id?}','AutoresCongresoController@GetAutoresCongreso');
 Route::post('congreso/SubirArchivo/','AutoresCongresoController@uploading');
 
 
