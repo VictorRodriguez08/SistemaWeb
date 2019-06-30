@@ -44,6 +44,7 @@ class TesisController extends Controller
             //return Tesis::find(21)->ultimo_archivo();
 
             $tesis = Tesis::obtener_todos();
+
             return view('principal.tesis.index',['tesis'=>$tesis]);
         }
         return redirect('home');

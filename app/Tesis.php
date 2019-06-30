@@ -3,6 +3,7 @@
 namespace sistemaWeb;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Tesis extends Model
@@ -18,24 +19,51 @@ class Tesis extends Model
     }
 
     public static function obtener_todos(){
-        return self::select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
-            ->join('estados', 'tesis.estado_id', '=', 'estados.id')
-            ->orderBy('tesis.id', 'desc')
-            ->paginate(10);
+        if(Auth::user()->hasRole("Administrador")){
+            return self::select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
+                ->join('estados', 'tesis.estado_id', '=', 'estados.id')
+                ->orderBy('tesis.id', 'desc')
+                ->paginate(10);
+        }else{
+            return self::select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
+                ->join('estados', 'tesis.estado_id', '=', 'estados.id')
+                ->join('usuario_tesis', 'tesis.id', '=', 'usuario_tesis.tesis_id')
+                ->where('usuario_tesis.user_id', '=', Auth::user()->id)
+                ->orderBy('tesis.id', 'desc')
+                ->paginate(10);
+        }
     }
 
     public static function buscar($criterio){
-        return DB::table("tesis")
-            ->select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
-            ->join('estados', 'tesis.estado_id', '=', 'estados.id')
-            ->join('usuario_tesis', 'usuario_tesis.tesis_id', '=', 'tesis.id')
-            ->join('users', 'usuario_tesis.user_id', '=', 'users.id')
-            ->whereRaw(DB::raw('tesis.titulo like "%'.$criterio.'%"'))
-            ->orwhereRaw(DB::raw('facultad like "%'.$criterio.'%"'))
-            ->orwhereRaw(DB::raw('carrera like "%'.$criterio.'%"'))
-            ->orwhereRaw(DB::raw('concat(users.name, " ", users.apellidos) like "%'.$criterio.'%"'))
-            ->distinct()
-            ->get();
+        if(!Auth::user()->hasRole("Administrador")) {
+            return DB::table("tesis")
+                ->select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
+                ->join('estados', 'tesis.estado_id', '=', 'estados.id')
+                ->join('usuario_tesis', 'usuario_tesis.tesis_id', '=', 'tesis.id')
+                ->join('users', 'usuario_tesis.user_id', '=', 'users.id')
+                ->whereRaw(DB::raw('tesis.titulo like "%' . $criterio . '%"'))
+                ->orwhereRaw(DB::raw('facultad like "%' . $criterio . '%"'))
+                ->orwhereRaw(DB::raw('carrera like "%' . $criterio . '%"'))
+                ->orwhereRaw(DB::raw('concat(users.name, " ", users.apellidos) like "%' . $criterio . '%"'))
+                ->distinct()
+                ->get();
+        }else{
+            return DB::table("tesis")
+                ->select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
+                ->join('estados', 'tesis.estado_id', '=', 'estados.id')
+                ->join('usuario_tesis', 'usuario_tesis.tesis_id', '=', 'tesis.id')
+                ->join('users', 'usuario_tesis.user_id', '=', 'users.id')
+                ->Where(function ($query) {
+                    $query->where('user.id', '=', Auth::user()->id)
+                        ->orWwhere('estados.estado', '=', 'Finalizado');
+                })
+                ->whereRaw(DB::raw('tesis.titulo like "%' . $criterio . '%"'))
+                ->orwhereRaw(DB::raw('facultad like "%' . $criterio . '%"'))
+                ->orwhereRaw(DB::raw('carrera like "%' . $criterio . '%"'))
+                ->orwhereRaw(DB::raw('concat(users.name, " ", users.apellidos) like "%' . $criterio . '%"'))
+                ->distinct()
+                ->get();
+        }
     }
 
     public function obtener_asesor(){
