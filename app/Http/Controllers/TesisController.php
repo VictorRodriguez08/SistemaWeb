@@ -36,16 +36,22 @@ class TesisController extends Controller
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if (Gate::allows('listar-tesis')) {
+            $query=trim($request->get('searchText'));
+
 
             //return Tesis::buscar("Tesis Prueba Sistemas hh");
             //return Tesis::find(21)->ultimo_archivo();
+            if($query == null){
+                $tesis = Tesis::obtener_todos();
+            }else{
+                $tesis = Tesis::buscar($query);
+            }
 
-            $tesis = Tesis::obtener_todos();
 
-            return view('principal.tesis.index',['tesis'=>$tesis]);
+            return view('principal.tesis.index',['tesis'=>$tesis,"searchText"=>$query]);
         }
         return redirect('home');
     }

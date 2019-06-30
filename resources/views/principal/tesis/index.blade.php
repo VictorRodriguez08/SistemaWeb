@@ -21,6 +21,7 @@
 		@can('crear-tesis', auth()->user())
 		<h3>Listado de Tesis <a href="tesis/create"> <button class="btn btn-success">Nuevo</button></a></h3>
 		@endcan
+			@include('principal.tesis.search')
 	</div>
 	<input type="hidden" value="{{url('tesis/GetUsuariosTesis')}}" id="urlListarUsuarios">
 	<div class="col-sm-12">

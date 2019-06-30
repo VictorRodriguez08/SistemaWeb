@@ -35,9 +35,8 @@ class Tesis extends Model
     }
 
     public static function buscar($criterio){
-        if(!Auth::user()->hasRole("Administrador")) {
-            return DB::table("tesis")
-                ->select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
+        if(Auth::user()->hasRole("Administrador")) {
+            return self::select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
                 ->join('estados', 'tesis.estado_id', '=', 'estados.id')
                 ->join('usuario_tesis', 'usuario_tesis.tesis_id', '=', 'tesis.id')
                 ->join('users', 'usuario_tesis.user_id', '=', 'users.id')
@@ -46,23 +45,29 @@ class Tesis extends Model
                 ->orwhereRaw(DB::raw('carrera like "%' . $criterio . '%"'))
                 ->orwhereRaw(DB::raw('concat(users.name, " ", users.apellidos) like "%' . $criterio . '%"'))
                 ->distinct()
-                ->get();
+                ->paginate(10);
         }else{
-            return DB::table("tesis")
-                ->select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
+            return self::select("tesis.id", "tesis.titulo", "tesis.fecha_ini", "tesis.fecha_fin", "estados.estado")
                 ->join('estados', 'tesis.estado_id', '=', 'estados.id')
                 ->join('usuario_tesis', 'usuario_tesis.tesis_id', '=', 'tesis.id')
                 ->join('users', 'usuario_tesis.user_id', '=', 'users.id')
                 ->Where(function ($query) {
-                    $query->where('user.id', '=', Auth::user()->id)
-                        ->orWwhere('estados.estado', '=', 'Finalizado');
+                    $query->where('users.id', '=', Auth::user()->id)
+                        ->orWhere('estados.estado', '=', 'Finalizado');
                 })
-                ->whereRaw(DB::raw('tesis.titulo like "%' . $criterio . '%"'))
-                ->orwhereRaw(DB::raw('facultad like "%' . $criterio . '%"'))
-                ->orwhereRaw(DB::raw('carrera like "%' . $criterio . '%"'))
-                ->orwhereRaw(DB::raw('concat(users.name, " ", users.apellidos) like "%' . $criterio . '%"'))
+                ->orWhereRaw(DB::raw('tesis.titulo like "%' . $criterio . '%"'))
+                ->orwhere(function($query) use ($criterio) {
+                    $query->whereRaw(DB::raw('facultad like "%' . $criterio . '%"'))
+                        ->where('estados.estado', '=', 'Finalizado');
+                })
+                ->orwhere(function($query) use ($criterio) {
+                    $query->whereRaw(DB::raw('carrera like "%' . $criterio . '%"'))
+                        ->where('estados.estado', '=', 'Finalizado');
+                })
+                ->whereRaw(DB::raw('concat(users.name, " ", users.apellidos) like "%' . $criterio . '%"'))
                 ->distinct()
-                ->get();
+                ->groupBy('tesis.id')
+                ->paginate(10);
         }
     }
 
